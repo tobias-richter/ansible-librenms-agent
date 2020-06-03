@@ -1,0 +1,65 @@
+- fail:
+    msg: you must provide a 'librenms_agent_snmp_extension_smart_config' when smart is enabled
+  when: librenms_agent_snmp_extension_smart_config|default("") == ""
+
+- name: Create smartmontools directory
+  file:
+    path: /opt/smartmontools
+    state: directory
+
+- name: Install build essential
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    name: build-essential
+
+- name: Download smartmontools sourcecode
+  get_url:
+    url: https://vorboss.dl.sourceforge.net/project/smartmontools/smartmontools/7.0/smartmontools-7.0.tar.gz
+    dest: /opt/smartmontools/smartmontools-7.0.tar.gz
+
+- name: Unpack smartmontools sourcecode
+  unarchive:
+    src: /opt/smartmontools/smartmontools-7.0.tar.gz
+    dest: /opt/smartmontools/
+    remote_src: yes
+
+- name: Build smartmontools
+  block:
+    - name: configure
+      command: ./configure
+      args:
+        chdir: /opt/smartmontools/smartmontools-7.0
+        creates: /opt/smartmontools/smartmontools-7.0/config.log
+    - name: make
+      command: make
+      args:
+        chdir: /opt/smartmontools/smartmontools-7.0
+        creates: /opt/smartmontools/smartmontools-7.0/smartctl.o
+    - name: make install
+      command: make DESTDIR=/opt/smartmontools/bin install
+      args:
+        chdir: /opt/smartmontools/smartmontools-7.0
+        creates: /opt/smartmontools/bin
+
+- name: configure smart.config
+  template:
+    src: smart.config.j2
+    dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/smart.config"
+    mode: "0744"
+  notify: restart snmpd
+
+- name: setup cron to read smart values
+  cron:
+    name: "update smart"
+    special_time: hourly
+    job: "/etc/snmp/snmpd.d/smart -u"
+
+- name: setup cron for smart short test
+  cron:
+    name: "run short test"
+    special_time: weekly
+    job: "/usr/sbin/smartctl -t short /dev/{{ item }} 2>&1 | ts >> /var/log/smart.log"
+  when: librenms_agent_smart_disks is defined
+  with_items: "{{ librenms_agent_smart_disks }}"
+

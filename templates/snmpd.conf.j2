@@ -1,0 +1,54 @@
+#{{ ansible_managed }}
+
+########################################################################
+# AGENT BEHAVIOR
+
+{% if librenms_agent_address is defined %}
+agentAddress {{ librenms_agent_address }}
+{% endif %}
+
+# do not log udp requests
+dontLogTCPWrappersConnects {{ librenms_agent_dont_log_tcp_wrapper_connects }}
+
+# skip NFS to avoid snmpd issues with pve and other hosts
+skipNFSInHostResources true
+
+########################################################################
+# ACCESS CONTROL
+# ------------------------------------------------------------------------------
+
+createUser {{ librenms_agent_snmp_user | mandatory }} MD5 {{ librenms_agent_snmp_password | mandatory }} DES {{ librenms_agent_snmp_encryption | mandatory }}
+
+rouser {{ librenms_agent_snmp_user | mandatory }} priv
+
+################################################################################
+# SYSTEM INFORMATION
+
+# ------------------------------------------------------------------------------
+# System Group
+
+sysLocation {{ librenms_agent_snmp_syslocation | mandatory }}
+sysContact {{ librenms_agent_snmp_syscontact | mandatory }}
+sysName {{ librenms_agent_snmp_sysname | mandatory }}
+
+{% if librenms_agent_custom_block is defined %}
+###############################################################################
+# Custom librenms agent block via librenms_agent_custom_block
+{{ librenms_agent_custom_block | default('') }}
+{% endif %}
+
+###############################################################################
+# Extensions
+
+{% for extension in librenms_agent_snmp_extensions %}
+#{{ extension.comment | default('') }}
+extend {{ extension.name }} {{ librenms_agent_snmp_snmpd_extends_dir }}/{{ extension.script }} {{ extension.args|default('') }}
+{% endfor %}
+
+###############################################################################
+# Pass persist extensions
+
+{% for pass_persist in librenms_agent_snmp_pass_persists %}
+#{{ pass_persist.comment | default('') }}
+#pass_persist {{ pass_persist.miboid }} {{ pass_persist.script }}
+{% endfor %}

@@ -1,0 +1,11 @@
+- name: install required python modules
+  package:
+    name:
+      - python-urlgrabber
+      - python-pycurl
+
+- name: Ensure cache directory is present.
+  file:
+    path: /var/cache/librenms
+    state: directory
+    owner: Debian-snmp

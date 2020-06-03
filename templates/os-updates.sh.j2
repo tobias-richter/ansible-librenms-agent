@@ -1,0 +1,7 @@
+#!/bin/bash
+RANDOM_DELAY=$(($RANDOM % {{ librenms_agent_base_cron_random_delay }}))
+echo "os-updates start with a delay of $RANDOM_DELAY seconds" | ts >> /var/log/os-updates.log
+sleep $RANDOM_DELAY
+echo "os-updates start" | ts >> /var/log/os-updates.log
+/usr/bin/apt-get update 2>&1 | ts >> /var/log/os-updates.log
+echo "os-updates end" | ts >> /var/log/os-updates.log

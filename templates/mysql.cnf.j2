@@ -1,0 +1,5 @@
+<?php
+// {{ ansible_managed }}
+$mysql_user = '{{ librenms_agent_snmp_extension_mysql_username }}';
+$mysql_pass = '{{ librenms_agent_snmp_extension_mysql_password | regex_replace("'", "\\'") }}';
+?>

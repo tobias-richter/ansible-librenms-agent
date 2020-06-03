@@ -1,0 +1,9 @@
+- name: restart snmpd
+  service:
+    name: "{{ librenms_agent_service_name }}"
+    state: restarted
+
+- name: restart check_mk
+  systemd:
+    name: check_mk.socket
+    state: restarted

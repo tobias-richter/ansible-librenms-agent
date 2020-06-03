@@ -1,0 +1,6 @@
+- name: configure mysql.cnf
+  template:
+    src: mysql.cnf.j2
+    dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/mysql.cnf"
+    mode: "0744"
+  notify: restart snmpd

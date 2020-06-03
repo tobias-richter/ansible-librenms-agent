@@ -1,0 +1,74 @@
+librenms_agent_service_name: snmpd
+
+librenms_agent_agent_repo: https://github.com/tobias-richter/librenms-agent.git
+librenms_agent_agent_dir: /opt/librenms-agent
+librenms_agent_agent_dir_snmp: "{{ librenms_agent_agent_dir }}/snmp"
+librenms_agent_agent_branch: master
+
+librenms_agent_dont_log_tcp_wrapper_connects: yes
+
+librenms_agent_snmp_dir: /etc/snmp
+librenms_agent_snmp_snmpd_conf:  "{{ librenms_agent_snmp_dir }}/snmpd.conf"
+librenms_agent_snmp_snmpd_extends_dir:  "{{ librenms_agent_snmp_dir }}/snmpd.d"
+librenms_agent_snmp_extensions: []
+# example:
+#  - name: osupdate
+#    script: os-updates.sh
+#    comment: enable os updates in librenms
+#  - name: raspberry
+#    script: raspberry.sh
+#    comment: enable raspberry in librenms
+#  - name: ".1.3.6.1.4.1.2021.7890.1 distro"
+#    script: distro
+#    comment: enable distribution
+#    args: -v
+#  - name: pi-hole
+#    script: pi-hole
+#    copy_force: no
+#    comment: enable pi hole in librenms
+#    packages:
+#      - jq
+
+librenms_agent_snmp_pass_persists: []
+# example:
+# - name: mib_lvm
+#   miboid: .1.3.6.1.4.1.19039.23
+#   script: /opt/lvm-mib/perl/mib_lvm.pl
+#   comment: mib_lvm
+
+librenms_agent_snmp_ro_community_name: public
+librenms_agent_snmp_sysname: "{{ ansible_fqdn }}"
+
+# must be set!
+#librenms_agent_snmp_user:
+#librenms_agent_snmp_password:
+#librenms_agent_snmp_encryption:
+
+
+# must be set when smart is enabled on a host
+#librenms_agent_snmp_extension_smart_config: |
+#  smartctl=/usr/sbin/smartctl -d sat
+#  cache=/var/cache/smart
+#  sda
+
+# must be set when mysql extension is used
+#librenms_agent_snmp_extension_mysql_username:
+#librenms_agent_snmp_extension_mysql_password:
+# must be set when pi-hole extension is used
+#librenms_agent_snmp_extension_pihole_apikey:
+librenms_agent_snmp_extension_pihole_apiurl: "localhost/admin/api.php"
+
+librenms_agent_check_mk_extensions: []
+librenms_agent_check_mk_dir: /usr/lib/check_mk_agent
+librenms_agent_check_mk_local_dir: "{{ librenms_agent_check_mk_dir }}/local"
+librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
+librenms_agent_check_mk_nginx_status_url: http://127.0.0.1/nginx-status
+
+librenms_agent_os_updates_cron_special_time: daily
+
+# Defines the listen address
+#librenms_agent_address: #
+
+librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
+
+librenms_agent_base_cron_random_delay: 900

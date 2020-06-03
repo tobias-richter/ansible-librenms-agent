@@ -1,0 +1,6 @@
+- name: configure nginx status url
+  replace:
+    path: "{{ librenms_agent_check_mk_local_dir }}/nginx"
+    regexp: "^data = urllib2.urlopen.*"
+    replace: "data = urllib2.urlopen('{{ librenms_agent_check_mk_nginx_status_url }}').read()"
+  notify: restart check_mk

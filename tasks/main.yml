@@ -1,0 +1,23 @@
+- name: Install required packages.
+  package:
+    name:
+    - git
+
+- name: clone librenms agent setup
+  git:
+    repo: "{{ librenms_agent_agent_repo }}"
+    dest: "{{ librenms_agent_agent_dir }}"
+    version: "{{ librenms_agent_agent_branch }}"
+  tags:
+    - librenms-agent-clone
+
+- name: setup snmp
+  include_tasks: setup_snmp.yml
+  tags:
+    - librenms-agent-snmp
+
+- name: setup check_mk
+  include_tasks: setup_check_mk.yml
+  tags:
+    - librenms-agent-check_mk
+

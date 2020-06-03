@@ -1,0 +1,90 @@
+- name: Install snmpd and dependencies
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    name:
+      - snmpd
+      - moreutils
+    state: latest
+
+- name: create snpmd.d target dir
+  file:
+    path: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "get files in {{ librenms_agent_snmp_snmpd_extends_dir }}"
+  shell: "ls -1 {{ librenms_agent_snmp_snmpd_extends_dir }}"
+  register: snmpd_contents
+  changed_when: false
+
+- name: "delete not managed files from: {{ librenms_agent_snmp_snmpd_extends_dir }}"
+  file:
+    path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/{{ item }}"
+    state: absent
+  with_items: "{{ snmpd_contents.stdout_lines }}"
+  when: "librenms_agent_snmp_extensions | selectattr('script','search','{{ (item | splitext)[0] }}') | list | count == 0"
+
+- name: copy extensions to snmpd.d dir
+  copy:
+    src: "{{ librenms_agent_agent_dir_snmp }}/{{ item.script }}"
+    dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
+    remote_src: yes
+    force: "{{ item.copy_force | default('yes') }}"
+    mode: 0755
+  with_items: "{{ librenms_agent_snmp_extensions }}"
+  notify: restart snmpd
+
+- name: Install packages required by snmp scripts.
+  package:
+    name: "{{ item.packages }}"
+  when: item.packages is defined
+  with_items: "{{ librenms_agent_snmp_extensions }}"
+
+- name: include apache when apache is in the extensions
+  include_tasks: setup_snmp_apache.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','apache') | list | count > 0
+
+- name: include apache when apache is in the extensions
+  include_tasks: setup_snmp_certificate.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','certificate') | list | count > 0
+
+- name: include fail2ban when fail2ban is in the extensions
+  include_tasks: setup_snmp_fail2ban.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','fail2ban') | list | count > 0
+
+- name: include os-updates when os-updates is in the extensions
+  include_tasks: setup_snmp_osupdates.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','osupdate') | list | count > 0
+  tags:
+    - os-updates
+
+- name: include smart setup when smart is in the extensions
+  include_tasks: setup_snmp_smart.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','smart') | list | count > 0
+
+- name: include mysql setup when mysql is in the extensions
+  include_tasks: setup_snmp_mysql.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','mysql') | list | count > 0
+
+- name: include pihole setup when pihole is in the extensions
+  include_tasks: setup_snmp_pihole.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','pi-hole') | list | count > 0
+
+# Deactivated because it does not work
+#- name: include lvm-mib setup when lvm-mib is in the pass_persists
+#  include_tasks: setup_snmp_lvm-mib.yml
+#  when: librenms_agent_snmp_pass_persists | selectattr('name','equalto','mib_lvm') | list | count > 0
+
+- name: configure snmpd.conf
+  template:
+    src: snmpd.conf.j2
+    dest: "{{ librenms_agent_snmp_snmpd_conf }}"
+    mode: "0755"
+  notify: restart snmpd
+
+- name: give Debian-snmp user a shell to allow sudo
+  user:
+    name: Debian-snmp
+    shell: /bin/bash
+  notify: restart snmpd

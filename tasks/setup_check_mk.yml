@@ -1,0 +1,60 @@
+- name: copy check_mk agent bin
+  copy:
+    src: "{{ librenms_agent_agent_dir }}/check_mk_agent"
+    dest: "/usr/bin/check_mk_agent"
+    remote_src: yes
+    mode: 0755
+  notify: restart check_mk
+
+- name: copy check_mk service files
+  copy:
+    src: "{{ librenms_agent_agent_dir }}/{{ item }}"
+    dest: "/etc/systemd/system"
+    remote_src: yes
+    mode: 0644
+  with_items:
+    - "check_mk@.service"
+    - "check_mk.socket"
+  notify: restart check_mk
+
+- name: create check_mk directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - "{{ librenms_agent_check_mk_local_dir }}"
+    - "{{ librenms_agent_check_mk_plugins_dir }}"
+  notify: restart check_mk
+
+- name: "get files in {{ librenms_agent_check_mk_local_dir }}"
+  shell: "ls -1 {{ librenms_agent_check_mk_local_dir }}"
+  register: check_mk_contents
+  changed_when: false
+
+- name: "delete not managed files from: {{ librenms_agent_check_mk_local_dir }}"
+  file:
+    path: "{{ librenms_agent_check_mk_local_dir }}/{{ item }}"
+    state: absent
+  with_items: "{{ check_mk_contents.stdout_lines }}"
+  when: "librenms_agent_check_mk_extensions | selectattr('script','search','{{ (item | splitext)[0] }}') | list | count == 0"
+
+- name: copy check_mk extensions
+  copy:
+    src: "{{ librenms_agent_agent_dir }}/agent-local/{{ item.script }}"
+    dest: "{{ librenms_agent_check_mk_local_dir }}"
+    mode: 0755
+    remote_src: yes
+  with_items: "{{ librenms_agent_check_mk_extensions }}"
+  notify: restart check_mk
+
+- name: include nginx setup when nginx is in the extensions
+  include_tasks: setup_check_mk_nginx.yml
+  when: librenms_agent_check_mk_extensions | selectattr('script','equalto','nginx') | list | count > 0
+
+- name: enable check_mk service
+  systemd:
+    name: check_mk.socket
+    enabled: yes
+    daemon_reload: yes
+  notify: restart check_mk

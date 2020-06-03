@@ -1,0 +1,23 @@
+- name: Deploy os update script.
+  template:
+    src: templates/os-updates.sh.j2
+    dest: "/usr/local/bin/os-updates.sh"
+    mode: uog+x
+
+- name: Setup cron for updating apt.
+  cron:
+    name: "update apt"
+    special_time: "{{ librenms_agent_os_updates_cron_special_time }}"
+    job: "/usr/local/bin/os-updates.sh"
+  register: _cron_result
+
+- name: "Restart cron."
+  service:
+    name: cron
+    state: restarted
+  when: _cron_result.changed
+
+- name: "configure logrotate for os-updates log"
+  template:
+    src: etc/logrotate.d/os-updates.j2
+    dest: /etc/logrotate.d/os-updates
