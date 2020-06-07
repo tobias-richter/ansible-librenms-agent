@@ -116,9 +116,9 @@ This is the complete set of configuration options:
 
 This playbook setups a snmpd agent for librenms with osupdate, distro and dpkg extension.
 
-    - hosts: apt_config
+    - hosts: librenms_agent
 	  roles:
-	    - role: tobias_richter.librenms-agent
+	    - role: tobias_richter.librenms_agent
           librenms_agent_snmp_extensions:
             - name: osupdate
               script: osupdate
