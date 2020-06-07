@@ -54,7 +54,7 @@ librenms_agent_snmp_extensions: []
 
 # List of snmp pass persist entries
 librenms_agent_snmp_pass_persists: []
-# example:
+# example: # (not working!)
 # - name: mib_lvm
 #   miboid: .1.3.6.1.4.1.19039.23
 #   script: /opt/lvm-mib/perl/mib_lvm.pl
@@ -91,5 +91,3 @@ librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 
 # Defines the listen address
 #librenms_agent_address: #
-
-

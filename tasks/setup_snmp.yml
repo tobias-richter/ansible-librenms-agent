@@ -70,11 +70,6 @@
   include_tasks: setup_snmp_pihole.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','pi-hole') | list | count > 0
 
-# Deactivated because it does not work
-#- name: include lvm-mib setup when lvm-mib is in the pass_persists
-#  include_tasks: setup_snmp_lvm-mib.yml
-#  when: librenms_agent_snmp_pass_persists | selectattr('name','equalto','mib_lvm') | list | count > 0
-
 - name: configure snmpd.conf
   template:
     src: snmpd.conf.j2

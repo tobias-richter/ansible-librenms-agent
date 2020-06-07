@@ -58,4 +58,3 @@
     job: "/usr/sbin/smartctl -t short /dev/{{ item }} 2>&1 | ts >> /var/log/smart.log"
   when: librenms_agent_smart_disks is defined
   with_items: "{{ librenms_agent_smart_disks }}"
-
