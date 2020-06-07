@@ -1,15 +1,38 @@
+# Name of the agent service
 librenms_agent_service_name: snmpd
 
+# The repository to clone the agent extensions from
 librenms_agent_agent_repo: https://github.com/tobias-richter/librenms-agent.git
+# The path to clone the agent extensions to
 librenms_agent_agent_dir: /opt/librenms-agent
+# The snmp directory of the librenms agent extensions
 librenms_agent_agent_dir_snmp: "{{ librenms_agent_agent_dir }}/snmp"
+# The branch of the agent extensions
 librenms_agent_agent_branch: master
 
+# Enables/Disables the tcp wrapper connect messages in the log
 librenms_agent_dont_log_tcp_wrapper_connects: yes
 
+# Path to the snmp directorues and the config files
 librenms_agent_snmp_dir: /etc/snmp
 librenms_agent_snmp_snmpd_conf:  "{{ librenms_agent_snmp_dir }}/snmpd.conf"
 librenms_agent_snmp_snmpd_extends_dir:  "{{ librenms_agent_snmp_dir }}/snmpd.d"
+
+# The read only community name
+librenms_agent_snmp_ro_community_name: public
+
+# The system name
+librenms_agent_snmp_sysname: "{{ ansible_fqdn }}"
+
+# Maximum random delay to spread the load. Used in cron jobs like os-updates.
+librenms_agent_base_cron_random_delay: 900
+
+# User, password and encryption string, must be set!
+#librenms_agent_snmp_user:
+#librenms_agent_snmp_password:
+#librenms_agent_snmp_encryption:
+
+# List of snmp extensions to setup/install
 librenms_agent_snmp_extensions: []
 # example:
 #  - name: osupdate
@@ -29,6 +52,7 @@ librenms_agent_snmp_extensions: []
 #    packages:
 #      - jq
 
+# List of snmp pass persist entries
 librenms_agent_snmp_pass_persists: []
 # example:
 # - name: mib_lvm
@@ -36,39 +60,36 @@ librenms_agent_snmp_pass_persists: []
 #   script: /opt/lvm-mib/perl/mib_lvm.pl
 #   comment: mib_lvm
 
-librenms_agent_snmp_ro_community_name: public
-librenms_agent_snmp_sysname: "{{ ansible_fqdn }}"
+# Configuration for check mk addons
+librenms_agent_check_mk_extensions: []
+librenms_agent_check_mk_dir: /usr/lib/check_mk_agent
+librenms_agent_check_mk_local_dir: "{{ librenms_agent_check_mk_dir }}/local"
+librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
 
-# must be set!
-#librenms_agent_snmp_user:
-#librenms_agent_snmp_password:
-#librenms_agent_snmp_encryption:
-
-
-# must be set when smart is enabled on a host
+# Configuration for S.M.A.R.T. extension, must be set when smart is enabled on a host
 #librenms_agent_snmp_extension_smart_config: |
 #  smartctl=/usr/sbin/smartctl -d sat
 #  cache=/var/cache/smart
 #  sda
 
-# must be set when mysql extension is used
+# Configuration for mysql extension, must be set when mysql extension is used.
 #librenms_agent_snmp_extension_mysql_username:
 #librenms_agent_snmp_extension_mysql_password:
-# must be set when pi-hole extension is used
+
+# Configuration for pihole extension, must be set when pi-hole extension is used
 #librenms_agent_snmp_extension_pihole_apikey:
 librenms_agent_snmp_extension_pihole_apiurl: "localhost/admin/api.php"
 
-librenms_agent_check_mk_extensions: []
-librenms_agent_check_mk_dir: /usr/lib/check_mk_agent
-librenms_agent_check_mk_local_dir: "{{ librenms_agent_check_mk_dir }}/local"
-librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
+# Configuration for checkmx nginx extension
 librenms_agent_check_mk_nginx_status_url: http://127.0.0.1/nginx-status
 
+# Configuration of os updates extension, must be set when os-updates is enabled on host
 librenms_agent_os_updates_cron_special_time: daily
+
+# Basic configuration of the certificate extension
+librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 
 # Defines the listen address
 #librenms_agent_address: #
 
-librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 
-librenms_agent_base_cron_random_delay: 900
