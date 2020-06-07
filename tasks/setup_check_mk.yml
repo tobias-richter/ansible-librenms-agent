@@ -37,7 +37,7 @@
     path: "{{ librenms_agent_check_mk_local_dir }}/{{ item }}"
     state: absent
   with_items: "{{ check_mk_contents.files }}"
-  when: "librenms_agent_check_mk_extensions | selectattr('script','search','{{ (item.path | basename | splitext)[0] }}') | list | count == 0"
+  when: librenms_agent_check_mk_extensions | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
 
 - name: copy check_mk extensions
   copy:

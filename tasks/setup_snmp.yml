@@ -22,7 +22,7 @@
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/{{ item }}"
     state: absent
   with_items: "{{ snmpd_contents.files }}"
-  when: "librenms_agent_snmp_extensions | selectattr('script','search','{{ (item.path | basename | splitext)[0] }}') | list | count == 0"
+  when: librenms_agent_snmp_extensions | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
 
 - name: copy extensions to snmpd.d dir
   copy:
