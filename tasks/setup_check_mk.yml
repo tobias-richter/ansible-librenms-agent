@@ -28,16 +28,16 @@
   notify: restart check_mk
 
 - name: "get files in {{ librenms_agent_check_mk_local_dir }}"
-  shell: "ls -1 {{ librenms_agent_check_mk_local_dir }}"
+  find:
+    paths: "{{ librenms_agent_check_mk_local_dir }}"
   register: check_mk_contents
-  changed_when: false
 
 - name: "delete not managed files from: {{ librenms_agent_check_mk_local_dir }}"
   file:
     path: "{{ librenms_agent_check_mk_local_dir }}/{{ item }}"
     state: absent
-  with_items: "{{ check_mk_contents.stdout_lines }}"
-  when: "librenms_agent_check_mk_extensions | selectattr('script','search','{{ (item | splitext)[0] }}') | list | count == 0"
+  with_items: "{{ check_mk_contents.files }}"
+  when: "librenms_agent_check_mk_extensions | selectattr('script','search','{{ (item.path | basename | splitext)[0] }}') | list | count == 0"
 
 - name: copy check_mk extensions
   copy:

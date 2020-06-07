@@ -1,7 +1,3 @@
-- fail:
-    msg: you must provide a 'librenms_agent_snmp_extension_smart_config' when smart is enabled
-  when: librenms_agent_snmp_extension_smart_config|default("") == ""
-
 - name: Create smartmontools directory
   file:
     path: /opt/smartmontools

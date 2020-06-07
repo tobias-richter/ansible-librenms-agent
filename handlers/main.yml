@@ -7,3 +7,8 @@
   systemd:
     name: check_mk.socket
     state: restarted
+
+- name: restart cron
+  service:
+    name: cron
+    state: restarted

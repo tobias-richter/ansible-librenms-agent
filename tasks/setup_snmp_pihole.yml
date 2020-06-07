@@ -1,12 +1,8 @@
-- fail:
-    msg: you must provide a 'librenms_agent_snmp_extension_pihole_apikey' when pihole is enabled
-  when: librenms_agent_snmp_extension_pihole_apikey|default("") == ""
-
 - name: configure pihole apikey
   replace:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"
     regexp: "^API_AUTH_KEY=.*"
-    replace: "API_AUTH_KEY=\"{{ librenms_agent_snmp_extension_pihole_apikey }}\""
+    replace: "API_AUTH_KEY=\"{{ librenms_agent_snmp_extension_pihole_apikey | mandatory }}\""
   notify: restart snmpd
 
 - name: configure pihole apiurl
