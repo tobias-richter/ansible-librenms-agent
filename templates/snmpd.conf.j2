@@ -13,6 +13,14 @@ dontLogTCPWrappersConnects {{ librenms_agent_dont_log_tcp_wrapper_connects }}
 # skip NFS to avoid snmpd issues with pve and other hosts
 skipNFSInHostResources true
 
+
+{% if librenms_agent_snmp_ignoredisk | length > 0 %}
+# ignore disks
+{% for ignoredisk in librenms_agent_snmp_ignoredisk %}
+ignoredisk {{ ignoredisk }}
+{% endfor %}
+{% endif %}
+
 ########################################################################
 # ACCESS CONTROL
 # ------------------------------------------------------------------------------

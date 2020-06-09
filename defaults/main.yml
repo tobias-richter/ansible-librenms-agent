@@ -60,8 +60,13 @@ librenms_agent_snmp_pass_persists: []
 #   script: /opt/lvm-mib/perl/mib_lvm.pl
 #   comment: mib_lvm
 
+# Controls the ignoredisk behavior of the snmp agent
+librenms_agent_snmp_ignoredisk: []
+# - /dev/dm-*
+
 # Configuration for check mk addons
 librenms_agent_check_mk_extensions: []
+# e.g. - script: dpkg
 librenms_agent_check_mk_dir: /usr/lib/check_mk_agent
 librenms_agent_check_mk_local_dir: "{{ librenms_agent_check_mk_dir }}/local"
 librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
