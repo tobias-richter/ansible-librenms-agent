@@ -53,7 +53,7 @@
 
 - name: setup cron for smart short test
   cron:
-    name: "run short test"
+    name: "run short test {{ item }}"
     special_time: weekly
     job: "/usr/sbin/smartctl -t short /dev/{{ item }} 2>&1 | ts >> /var/log/smart.log"
   when: librenms_agent_smart_disks is defined
