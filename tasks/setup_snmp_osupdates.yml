@@ -2,7 +2,7 @@
   template:
     src: templates/os-updates.sh.j2
     dest: "/usr/local/bin/os-updates.sh"
-    mode: 750
+    mode: 0750
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
 
