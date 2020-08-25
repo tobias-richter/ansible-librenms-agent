@@ -77,7 +77,7 @@ librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
 
 # Configuration for S.M.A.R.T. extension, must be set when smart is enabled on a host
 #librenms_agent_snmp_extension_smart_config: |
-#  smartctl=/usr/sbin/smartctl -d sat
+#  smartctl=/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin/usr/local/sbin/smartctl -d sat
 #  cache=/var/cache/smart
 #  sda
 
@@ -97,6 +97,9 @@ librenms_agent_os_updates_cron_special_time: daily
 
 # Basic configuration of the certificate extension
 librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
+
+# The version of smartmontools to install/compile
+librenms_agent_smartmontools_version: 7.1
 
 # Defines the listen address
 #librenms_agent_address: #
