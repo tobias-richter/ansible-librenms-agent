@@ -9,9 +9,9 @@ for setting up librenms.
 
 This role is tested with the following snmp extensions (and may work
 with more):
-* osupdate.
-* distro.
-* entropy.
+* osupdate
+* distro
+* entropy
 * apache-stats.py
 * mysql
 * certificate.py
@@ -21,6 +21,9 @@ with more):
 * pi-hole
 * ups-nut.sh
 * smart
+* postfixdetailed
+* postfix-queues
+* redis.py (with https://github.com/librenms/librenms-agent/pull/327)
 
 Beside the snmp extensions the role is tested with the following checkmk
 extensions (and may work with more):
