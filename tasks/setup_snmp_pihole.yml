@@ -3,7 +3,7 @@
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"
     regexp: "^API_AUTH_KEY=.*"
     replace: "API_AUTH_KEY=\"{{ librenms_agent_snmp_extension_pihole_apikey | mandatory }}\""
-    mode: 0644
+    mode: 0640
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd
@@ -13,7 +13,7 @@
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"
     regexp: "^API_URL=.*"
     replace: "API_URL=\"{{ librenms_agent_snmp_extension_pihole_apiurl }}\""
-    mode: 0644
+    mode: 0640
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd

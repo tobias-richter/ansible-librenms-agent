@@ -2,7 +2,9 @@
   template:
     src: templates/os-updates.sh.j2
     dest: "/usr/local/bin/os-updates.sh"
-    mode: uog+x
+    mode: 750
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
 
 - name: "snmp : osupdates : Setup cron for updating apt."
   cron:

@@ -10,7 +10,7 @@
   file:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
     state: directory
-    mode: 0755
+    mode: 0750
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
 
@@ -32,7 +32,7 @@
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
     remote_src: yes
     force: "{{ item.copy_force | default('yes') }}"
-    mode: 0755
+    mode: 0750
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   with_items: "{{ librenms_agent_snmp_extensions }}"

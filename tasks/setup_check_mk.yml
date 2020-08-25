@@ -3,7 +3,7 @@
     src: "{{ librenms_agent_agent_dir }}/check_mk_agent"
     dest: "/usr/bin/check_mk_agent"
     remote_src: yes
-    mode: 0755
+    mode: 0750
   notify: restart check_mk
 
 - name: "checkmk : copy check_mk service files."
