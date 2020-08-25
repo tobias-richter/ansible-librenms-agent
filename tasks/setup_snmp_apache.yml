@@ -1,4 +1,4 @@
-- name: install required python modules
+- name: install required python modules.
   package:
     name:
       - python-urlgrabber

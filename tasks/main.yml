@@ -3,7 +3,7 @@
     name:
     - git
 
-- name: clone librenms agent setup
+- name: clone librenms agent setup.
   git:
     repo: "{{ librenms_agent_agent_repo }}"
     dest: "{{ librenms_agent_agent_dir }}"
@@ -11,12 +11,12 @@
   tags:
     - librenms-agent-clone
 
-- name: setup snmp
+- name: setup snmp.
   include_tasks: setup_snmp.yml
   tags:
     - librenms-agent-snmp
 
-- name: setup check_mk
+- name: setup check_mk.
   include_tasks: setup_check_mk.yml
   tags:
     - librenms-agent-check_mk
