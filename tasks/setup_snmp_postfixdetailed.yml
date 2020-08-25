@@ -1,0 +1,11 @@
+- name: "snmp : postfixdetailed : install required packages."
+  package:
+    name:
+      - pflogsumm
+
+- name: "snmp : postfixdetailed : give Debian-snmp the appropriate sudo rights."
+  copy:
+    dest: /etc/sudoers.d/Debian-snmp_postfixdetailed
+    content: |
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/env pflogsumm /var/log/mail.log
+    mode: 600

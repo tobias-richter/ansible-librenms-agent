@@ -70,7 +70,11 @@
   include_tasks: setup_snmp_pihole.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','pi-hole') | list | count > 0
 
-- name: configure snmpd.conf
+- name: include postfixdetailed setup when postfixdetailed is in the extensions.
+  include_tasks: setup_snmp_postfixdetailed.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','postfixdetailed') | list | count > 0
+
+- name: configure snmpd.conf.
   template:
     src: snmpd.conf.j2
     dest: "{{ librenms_agent_snmp_snmpd_conf }}"
