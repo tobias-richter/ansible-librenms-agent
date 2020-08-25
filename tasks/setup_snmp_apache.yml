@@ -3,9 +3,3 @@
     name:
       - python-urlgrabber
       - python-pycurl
-
-- name: "snmp : apache :Ensure cache directory is present."
-  file:
-    path: /var/cache/librenms
-    state: directory
-    owner: Debian-snmp

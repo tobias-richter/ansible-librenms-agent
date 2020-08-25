@@ -8,4 +8,4 @@
     dest: /etc/sudoers.d/Debian-snmp_postfixdetailed
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/env pflogsumm /var/log/mail.log
-    mode: 600
+    mode: 0600

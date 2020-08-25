@@ -2,6 +2,7 @@
   file:
     path: /opt/smartmontools
     state: directory
+    mode: 0755
 
 - name: "snmp : smart : Install build essential."
   apt:
@@ -19,6 +20,7 @@
     src: /opt/smartmontools/smartmontools-7.0.tar.gz
     dest: /opt/smartmontools/
     remote_src: yes
+    mode: 0766
 
 - name: "snmp : smart : Build smartmontools."
   block:

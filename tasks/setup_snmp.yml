@@ -10,7 +10,14 @@
   file:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
     state: directory
-    mode: 0755
+    mode: 0750
+
+- name: "Ensure cache directory is present."
+  file:
+    path: /var/cache/librenms
+    state: directory
+    owner: Debian-snmp
+    mode: 0770
 
 - name: "get files in {{ librenms_agent_snmp_snmpd_extends_dir }}."
   find:

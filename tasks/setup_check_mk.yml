@@ -26,7 +26,7 @@
     - "{{ librenms_agent_check_mk_local_dir }}"
     - "{{ librenms_agent_check_mk_plugins_dir }}"
     - "/var/cache/librenms"
-  notify: restart check_mk.
+  notify: restart check_mk
 
 - name: "checkmk : get files in {{ librenms_agent_check_mk_local_dir }}."
   find:

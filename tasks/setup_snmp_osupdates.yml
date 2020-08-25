@@ -16,3 +16,4 @@
   template:
     src: etc/logrotate.d/os-updates.j2
     dest: /etc/logrotate.d/os-updates
+    mode: 0644
