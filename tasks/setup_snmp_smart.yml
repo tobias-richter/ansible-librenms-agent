@@ -13,9 +13,10 @@
     cache_valid_time: 3600
     name: build-essential
 
-- name: "snmp : smart : Download smartmontools sourcecode." #noqa 204
+- name: "snmp : smart : Download smartmontools sourcecode." # noqa 204
   get_url:
-    url: "https://sourceforge.net/projects/smartmontools/files/smartmontools/{{ librenms_agent_smartmontools_version }}/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz/download"
+    url: "https://sourceforge.net/projects/smartmontools/files/smartmontools/\
+          {{ librenms_agent_smartmontools_version }}/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz/download"
     dest: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz"
 
 - name: "snmp : smart : Unpack smartmontools sourcecode."

@@ -21,9 +21,9 @@ with more):
 * pi-hole
 * ups-nut.sh
 * smart
-* postfixdetailed
-* postfix-queues
-* redis.py (with https://github.com/librenms/librenms-agent/pull/327)
+* postfixdetailed (with https://github.com/tobias-richter/librenms-agent)
+* postfix-queues (with https://github.com/tobias-richter/librenms-agent)
+* redis.py (with https://github.com/librenms/librenms-agent/pull/327 or https://github.com/tobias-richter/librenms-agent)
 
 Beside the snmp extensions the role is tested with the following checkmk
 extensions (and may work with more):
