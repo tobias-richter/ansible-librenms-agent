@@ -10,14 +10,9 @@
   file:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
     state: directory
-    mode: 0750
-
-- name: "Ensure cache directory is present."
-  file:
-    path: /var/cache/librenms
-    state: directory
-    owner: Debian-snmp
-    mode: 0770
+    mode: 0755
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
 
 - name: "get files in {{ librenms_agent_snmp_snmpd_extends_dir }}."
   find:
@@ -38,6 +33,8 @@
     remote_src: yes
     force: "{{ item.copy_force | default('yes') }}"
     mode: 0755
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   with_items: "{{ librenms_agent_snmp_extensions }}"
   notify: restart snmpd
 
@@ -81,11 +78,17 @@
   include_tasks: setup_snmp_postfixdetailed.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','postfixdetailed') | list | count > 0
 
+- name: include mailq/postfix-queues setup when mailq/postfix-queues is in the extensions.
+  include_tasks: setup_snmp_postfix_queues.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','mailq') | list | count > 0
+
 - name: configure snmpd.conf.
   template:
     src: snmpd.conf.j2
     dest: "{{ librenms_agent_snmp_snmpd_conf }}"
     mode: "0640"
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd
 
 - name: give Debian-snmp user a shell to allow sudo

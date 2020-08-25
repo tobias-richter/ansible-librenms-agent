@@ -1,0 +1,9 @@
+- name: "snmp : postfix-queues : give Debian-snmp the appropriate sudo rights."
+  copy:
+    dest: /etc/sudoers.d/Debian-snmp_postfix-queues
+    content: |
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape incoming
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape active
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape deferred
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape hold
+    mode: 0600

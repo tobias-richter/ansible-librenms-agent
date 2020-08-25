@@ -11,7 +11,9 @@
     src: "{{ librenms_agent_agent_dir }}/{{ item }}"
     dest: "/etc/systemd/system"
     remote_src: yes
-    mode: 0644
+    mode: 0640
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   with_items:
     - "check_mk@.service"
     - "check_mk.socket"
@@ -21,7 +23,9 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 0755
+    mode: 0750
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   with_items:
     - "{{ librenms_agent_check_mk_local_dir }}"
     - "{{ librenms_agent_check_mk_plugins_dir }}"
@@ -44,7 +48,9 @@
   copy:
     src: "{{ librenms_agent_agent_dir }}/agent-local/{{ item.script }}"
     dest: "{{ librenms_agent_check_mk_local_dir }}"
-    mode: 0755
+    mode: 0750
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
     remote_src: yes
   with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: restart check_mk

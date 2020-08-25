@@ -2,5 +2,7 @@
   template:
     src: mysql.cnf.j2
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/mysql.cnf"
-    mode: "0744"
+    mode: "0640"
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd

@@ -8,3 +8,5 @@
     src: templates/certificate.json.j2
     dest: "/etc/snmp/certificate.json"
     mode: uog+x
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
