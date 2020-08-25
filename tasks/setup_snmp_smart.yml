@@ -45,6 +45,8 @@
     src: smart.config.j2
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/smart.config"
     mode: "0640"
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd
 
 - name: "snmp : smart : setup cron to read smart values."
