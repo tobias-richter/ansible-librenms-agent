@@ -1,4 +1,4 @@
-- name: configure nginx status url.
+- name: "check_mk : nginx : configure nginx status url."
   replace:
     path: "{{ librenms_agent_check_mk_local_dir }}/nginx"
     regexp: "^data = urllib2.urlopen.*"

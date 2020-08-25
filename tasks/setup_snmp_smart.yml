@@ -1,26 +1,26 @@
-- name: Create smartmontools directory.
+- name: "snmp : smart : Create smartmontools directory."
   file:
     path: /opt/smartmontools
     state: directory
 
-- name: Install build essential.
+- name: "snmp : smart : Install build essential."
   apt:
     update_cache: yes
     cache_valid_time: 3600
     name: build-essential
 
-- name: Download smartmontools sourcecode.
+- name: "snmp : smart : Download smartmontools sourcecode."
   get_url:
-    url: https://vorboss.dl.sourceforge.net/project/smartmontools/smartmontools/7.0/smartmontools-7.0.tar.gz
+    url: https://sourceforge.net/projects/smartmontools/files/smartmontools/7.0/smartmontools-7.0.tar.gz/download
     dest: /opt/smartmontools/smartmontools-7.0.tar.gz
 
-- name: Unpack smartmontools sourcecode.
+- name: "snmp : smart : Unpack smartmontools sourcecode."
   unarchive:
     src: /opt/smartmontools/smartmontools-7.0.tar.gz
     dest: /opt/smartmontools/
     remote_src: yes
 
-- name: Build smartmontools.
+- name: "snmp : smart : Build smartmontools."
   block:
     - name: configure
       command: ./configure
@@ -38,20 +38,20 @@
         chdir: /opt/smartmontools/smartmontools-7.0
         creates: /opt/smartmontools/bin
 
-- name: configure smart.config.
+- name: "snmp : smart : configure smart.config."
   template:
     src: smart.config.j2
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/smart.config"
     mode: "0744"
   notify: restart snmpd
 
-- name: setup cron to read smart values.
+- name: "snmp : smart : setup cron to read smart values."
   cron:
     name: "update smart"
     special_time: hourly
     job: "/etc/snmp/snmpd.d/smart -u"
 
-- name: setup cron for smart short test.
+- name: "snmp : smart : setup cron for smart short test."
   cron:
     name: "run short test {{ item }}"
     special_time: weekly

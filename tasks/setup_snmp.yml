@@ -74,11 +74,13 @@
   template:
     src: snmpd.conf.j2
     dest: "{{ librenms_agent_snmp_snmpd_conf }}"
-    mode: "0755"
+    mode: "0640"
   notify: restart snmpd
 
 - name: give Debian-snmp user a shell to allow sudo
   user:
     name: Debian-snmp
     shell: /bin/bash
+    groups: sudo
+    append: yes
   notify: restart snmpd

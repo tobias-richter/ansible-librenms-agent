@@ -1,11 +1,11 @@
-- name: configure pihole apikey.
+- name: "snmp : pihole : configure pihole apikey."
   replace:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"
     regexp: "^API_AUTH_KEY=.*"
     replace: "API_AUTH_KEY=\"{{ librenms_agent_snmp_extension_pihole_apikey | mandatory }}\""
   notify: restart snmpd
 
-- name: configure pihole apiurl.
+- name: "snmp : pihole : configure pihole apiurl."
   replace:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"
     regexp: "^API_URL=.*"

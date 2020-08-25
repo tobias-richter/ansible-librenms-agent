@@ -1,10 +1,10 @@
-- name: install required python modules.
+- name: "snmp : apache : install required python modules."
   package:
     name:
       - python-urlgrabber
       - python-pycurl
 
-- name: Ensure cache directory is present.
+- name: "snmp : apache :Ensure cache directory is present."
   file:
     path: /var/cache/librenms
     state: directory

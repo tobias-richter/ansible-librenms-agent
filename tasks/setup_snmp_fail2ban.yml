@@ -1,9 +1,9 @@
-- name: Install required packages.
+- name: "snmp : fail2ban : Install required packages."
   package:
     name:
       - libjson-perl
 
-- name: setup fail2ban cronjob.
+- name: "snmp : fail2ban : setup fail2ban cronjob."
   cron:
     name: "Update snmp extend fail2ban"
     minute: "*/3"

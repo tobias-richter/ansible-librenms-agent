@@ -1,4 +1,4 @@
-- name: copy check_mk agent bin.
+- name: "checkmk : copy check_mk agent bin."
   copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk_agent"
     dest: "/usr/bin/check_mk_agent"
@@ -6,7 +6,7 @@
     mode: 0755
   notify: restart check_mk
 
-- name: copy check_mk service files.
+- name: "checkmk : copy check_mk service files."
   copy:
     src: "{{ librenms_agent_agent_dir }}/{{ item }}"
     dest: "/etc/systemd/system"
@@ -17,7 +17,7 @@
     - "check_mk.socket"
   notify: restart check_mk
 
-- name: create check_mk directories.
+- name: "checkmk : create check_mk directories."
   file:
     path: "{{ item }}"
     state: directory
@@ -28,19 +28,19 @@
     - "/var/cache/librenms"
   notify: restart check_mk.
 
-- name: "get files in {{ librenms_agent_check_mk_local_dir }}."
+- name: "checkmk : get files in {{ librenms_agent_check_mk_local_dir }}."
   find:
     paths: "{{ librenms_agent_check_mk_local_dir }}"
   register: check_mk_contents
 
-- name: "delete not managed files from: {{ librenms_agent_check_mk_local_dir }}."
+- name: "checkmk : delete not managed files from: {{ librenms_agent_check_mk_local_dir }}."
   file:
     path: "{{ librenms_agent_check_mk_local_dir }}/{{ item }}"
     state: absent
   with_items: "{{ check_mk_contents.files }}"
   when: librenms_agent_check_mk_extensions | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
 
-- name: copy check_mk extensions.
+- name: "checkmk : copy check_mk extensions."
   copy:
     src: "{{ librenms_agent_agent_dir }}/agent-local/{{ item.script }}"
     dest: "{{ librenms_agent_check_mk_local_dir }}"
@@ -49,11 +49,11 @@
   with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: restart check_mk
 
-- name: include nginx setup when nginx is in the extensions.
+- name: "checkmk : include nginx setup when nginx is in the extensions."
   include_tasks: setup_check_mk_nginx.yml
   when: librenms_agent_check_mk_extensions | selectattr('script','equalto','nginx') | list | count > 0
 
-- name: enable check_mk service.
+- name: "checkmk : enable check_mk service."
   systemd:
     name: check_mk.socket
     enabled: yes

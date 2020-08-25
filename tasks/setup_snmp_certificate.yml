@@ -1,9 +1,9 @@
-- name: install required python modules.
+- name: "snmp : certificate : install required python modules."
   package:
     name:
       - python-openssl
 
-- name: Deploy certificate.
+- name: "snmp : certificate : deploy certificate."
   template:
     src: templates/certificate.json.j2
     dest: "/etc/snmp/certificate.json"
