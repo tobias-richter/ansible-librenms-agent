@@ -9,3 +9,10 @@
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/env pflogsumm /var/log/mail.log
     mode: 0600
+
+- name: "snmp : postfixdetailed : create initial cache file to avoid strange stats."
+  command: /etc/snmp/snmpd.d/postfixdetailed
+  become_user: "{{ librenms_agent_snmp_owner }}"
+  become: yes
+  args:
+    creates: /var/cache/librenms/postfixdetailed
