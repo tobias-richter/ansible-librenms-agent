@@ -5,7 +5,6 @@
     - "{{ ansible_distribution }}.yml"
     - "default.yml"
 
-
 - name: Install required packages.
   package:
     name:
