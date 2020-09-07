@@ -6,17 +6,24 @@
     mode: 0750
   notify: restart check_mk
 
-- name: "checkmk : copy check_mk service files."
+- name: "checkmk : copy check_mk service file."
   copy:
-    src: "{{ librenms_agent_agent_dir }}/{{ item }}"
+    src: "{{ librenms_agent_agent_dir }}/check_mk@.service"
     dest: "/etc/systemd/system"
     remote_src: yes
     mode: 0644
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  with_items:
-    - "check_mk@.service"
-    - "check_mk.socket"
+  notify: restart check_mk
+
+- name: "checkmk : copy check_mk socket file."
+  copy:
+    src: "{{ librenms_agent_agent_dir }}/check_mk.socket"
+    dest: "/etc/systemd/system"
+    remote_src: yes
+    mode: 0640
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk
 
 - name: "checkmk : create check_mk directories."
