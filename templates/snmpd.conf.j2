@@ -29,6 +29,10 @@ createUser {{ librenms_agent_snmp_user | mandatory }} MD5 {{ librenms_agent_snmp
 
 rouser {{ librenms_agent_snmp_user | mandatory }} priv
 
+{% for rocommunity in librenms_agent_snmp_rocommunities %}
+rocommunity {{ rocommunity }}
+{% endfor %}
+
 ################################################################################
 # SYSTEM INFORMATION
 

@@ -23,7 +23,9 @@ librenms_agent_snmp_owner: "Debian-snmp"
 librenms_agent_snmp_group: "root"
 
 # The read only community name
-librenms_agent_snmp_ro_community_name: public
+librenms_agent_snmp_rocommunities: []
+# example:
+# - public
 
 # The system name
 librenms_agent_snmp_sysname: "{{ ansible_fqdn }}"
