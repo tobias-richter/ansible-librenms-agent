@@ -70,6 +70,9 @@ librenms_agent_snmp_pass_persists: []
 librenms_agent_snmp_ignoredisk: []
 # - /dev/dm-*
 
+# Checkmk socket ListenStream configuration, e.g. 127.0.0.1:6556 for localhost only
+librenms_agent_check_mk_listenstream: 6556
+
 # Configuration for check mk addons
 librenms_agent_check_mk_extensions: []
 # e.g. - script: dpkg

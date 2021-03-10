@@ -1,0 +1,9 @@
+[Unit]
+Description=Check_MK LibreNMS Agent Socket
+
+[Socket]
+ListenStream={{ librenms_agent_check_mk_listenstream }}
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
