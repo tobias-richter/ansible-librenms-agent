@@ -2,4 +2,4 @@
 - name: test role syntax
   hosts: test
   roles:
-    - librenms_agent
+    - tobias_richter.librenms_agent
