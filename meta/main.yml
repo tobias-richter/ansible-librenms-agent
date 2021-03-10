@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: librenms_agent
+  namespace: tobias_richter
   author: Tobias Richter
   description: Ansible Role for setting up and managing librenms clients.
   license: Apache
