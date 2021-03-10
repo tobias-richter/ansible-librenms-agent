@@ -1,3 +1,4 @@
+---
 - name: restart snmpd
   service:
     name: "{{ librenms_agent_service_name }}"

@@ -1,3 +1,4 @@
+---
 - name: "snmp : mysql : configure mysql.cnf."
   template:
     src: mysql.cnf.j2

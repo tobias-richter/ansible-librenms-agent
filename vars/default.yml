@@ -1,3 +1,4 @@
+---
 librenms_agent_snmp_apache_os_packages:
   - libcurl4-openssl-dev
   - libssl-dev

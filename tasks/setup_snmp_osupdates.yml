@@ -1,3 +1,4 @@
+---
 - name: "snmp : osupdates : Deploy os update script."
   template:
     src: templates/os-updates.sh.j2

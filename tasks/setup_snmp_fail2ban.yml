@@ -1,3 +1,4 @@
+---
 - name: "snmp : fail2ban : Install required packages."
   package:
     name:

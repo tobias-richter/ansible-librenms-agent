@@ -1,3 +1,4 @@
+---
 # Name of the agent service
 librenms_agent_service_name: snmpd
 
@@ -15,8 +16,8 @@ librenms_agent_dont_log_tcp_wrapper_connects: yes
 
 # Path to the snmp directorues and the config files
 librenms_agent_snmp_dir: /etc/snmp
-librenms_agent_snmp_snmpd_conf:  "{{ librenms_agent_snmp_dir }}/snmpd.conf"
-librenms_agent_snmp_snmpd_extends_dir:  "{{ librenms_agent_snmp_dir }}/snmpd.d"
+librenms_agent_snmp_snmpd_conf: "{{ librenms_agent_snmp_dir }}/snmpd.conf"
+librenms_agent_snmp_snmpd_extends_dir: "{{ librenms_agent_snmp_dir }}/snmpd.d"
 
 # Owner and group for snmp files
 librenms_agent_snmp_owner: "Debian-snmp"
@@ -34,9 +35,9 @@ librenms_agent_snmp_sysname: "{{ ansible_fqdn }}"
 librenms_agent_base_cron_random_delay: 900
 
 # User, password and encryption string, must be set!
-#librenms_agent_snmp_user:
-#librenms_agent_snmp_password:
-#librenms_agent_snmp_encryption:
+# librenms_agent_snmp_user:
+# librenms_agent_snmp_password:
+# librenms_agent_snmp_encryption:
 
 # List of snmp extensions to setup/install
 librenms_agent_snmp_extensions: []
@@ -81,17 +82,17 @@ librenms_agent_check_mk_local_dir: "{{ librenms_agent_check_mk_dir }}/local"
 librenms_agent_check_mk_plugins_dir: "{{ librenms_agent_check_mk_dir }}/plugins"
 
 # Configuration for S.M.A.R.T. extension, must be set when smart is enabled on a host
-#librenms_agent_snmp_extension_smart_config: |
-#  smartctl=/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin/usr/local/sbin/smartctl -d sat
-#  cache=/var/cache/smart
-#  sda
+# librenms_agent_snmp_extension_smart_config: |
+#   smartctl=/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin/usr/local/sbin/smartctl -d sat
+#   cache=/var/cache/smart
+#   sda
 
 # Configuration for mysql extension, must be set when mysql extension is used.
-#librenms_agent_snmp_extension_mysql_username:
-#librenms_agent_snmp_extension_mysql_password:
+# librenms_agent_snmp_extension_mysql_username:
+# librenms_agent_snmp_extension_mysql_password:
 
 # Configuration for pihole extension, must be set when pi-hole extension is used
-#librenms_agent_snmp_extension_pihole_apikey:
+# librenms_agent_snmp_extension_pihole_apikey:
 librenms_agent_snmp_extension_pihole_apiurl: "localhost/admin/api.php"
 
 # Configuration for checkmx nginx extension
@@ -107,4 +108,4 @@ librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 librenms_agent_smartmontools_version: 7.1
 
 # Defines the listen address
-#librenms_agent_address: #
+# librenms_agent_address: #

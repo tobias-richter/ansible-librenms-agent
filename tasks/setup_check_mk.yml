@@ -1,3 +1,4 @@
+---
 - name: "checkmk : copy check_mk agent bin."
   copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk_agent"

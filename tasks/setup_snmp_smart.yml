@@ -1,3 +1,4 @@
+---
 - name: "snmp : smart : Create smartmontools directory."
   file:
     path: "{{ item }}"

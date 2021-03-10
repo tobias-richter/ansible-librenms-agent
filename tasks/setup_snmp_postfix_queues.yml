@@ -1,3 +1,4 @@
+---
 - name: "snmp : postfix-queues : give Debian-snmp the appropriate sudo rights."
   copy:
     dest: /etc/sudoers.d/Debian-snmp_postfix-queues

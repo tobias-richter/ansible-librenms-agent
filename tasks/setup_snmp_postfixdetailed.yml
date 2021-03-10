@@ -1,3 +1,4 @@
+---
 - name: "snmp : postfixdetailed : install required packages."
   package:
     name:

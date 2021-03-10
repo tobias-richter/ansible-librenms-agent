@@ -1,3 +1,4 @@
+---
 - name: Include os specific variables.
   include_vars: "{{ item }}"
   with_first_found:
@@ -8,7 +9,7 @@
 - name: Install required packages.
   package:
     name:
-    - git
+      - git
 
 - name: clone librenms agent setup.
   git:

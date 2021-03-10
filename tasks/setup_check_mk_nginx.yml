@@ -1,3 +1,4 @@
+---
 - name: "check_mk : nginx : configure nginx status url."
   replace:
     path: "{{ librenms_agent_check_mk_local_dir }}/nginx"

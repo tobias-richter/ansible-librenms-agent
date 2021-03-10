@@ -1,3 +1,4 @@
+---
 - name: "snmp : pihole : configure pihole apikey."
   replace:
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/pi-hole"

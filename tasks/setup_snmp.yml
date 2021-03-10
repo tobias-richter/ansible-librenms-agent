@@ -1,3 +1,4 @@
+---
 - name: "snmp : Install snmpd and dependencies."
   apt:
     update_cache: yes
