@@ -19,8 +19,12 @@ librenms_agent_snmp_dir: /etc/snmp
 librenms_agent_snmp_snmpd_conf: "{{ librenms_agent_snmp_dir }}/snmpd.conf"
 librenms_agent_snmp_snmpd_extends_dir: "{{ librenms_agent_snmp_dir }}/snmpd.d"
 
+# Linux user and group(s) of the SNMP daemon
+librenms_agent_snmp_system_user: Debian-snmp
+librenms_agent_snmp_system_groups: []
+
 # Owner and group for snmp files
-librenms_agent_snmp_owner: "Debian-snmp"
+librenms_agent_snmp_owner: "{{ librenms_agent_snmp_system_user }}"
 librenms_agent_snmp_group: "root"
 
 # The read only community name

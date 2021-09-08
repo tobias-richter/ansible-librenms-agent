@@ -98,8 +98,16 @@
 
 - name: "snmp : give Debian-snmp user a shell to allow sudo"
   user:
-    name: Debian-snmp
+    name: "{{ librenms_agent_snmp_system_user }}"
     shell: /bin/bash
     groups: sudo
     append: yes
+  notify: restart snmpd
+
+- name: "snmp : assign Debian-snmp to additional groups."
+  user:
+    name: "{{ librenms_agent_snmp_system_user }}"
+    groups: "{{ librenms_agent_snmp_system_groups }}"
+    append: yes
+  when: librenms_agent_snmp_system_groups | length > 0
   notify: restart snmpd
