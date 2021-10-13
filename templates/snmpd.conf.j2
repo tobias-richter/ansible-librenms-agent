@@ -54,7 +54,7 @@ sysName {{ librenms_agent_snmp_sysname | mandatory }}
 
 {% for extension in librenms_agent_snmp_extensions %}
 #{{ extension.comment | default('') }}
-extend {{ extension.name }} {{ librenms_agent_snmp_snmpd_extends_dir }}/{{ extension.script }} {{ extension.args|default('') }}
+extend {{ extension.name }} {{ extension.script_prefix | default("") }}{{ librenms_agent_snmp_snmpd_extends_dir }}/{{ extension.script }} {{ extension.args|default('') }}
 {% endfor %}
 
 ###############################################################################

@@ -23,6 +23,7 @@ with more):
 * smart
 * postfixdetailed (with https://github.com/tobias-richter/librenms-agent)
 * postfix-queues (with https://github.com/tobias-richter/librenms-agent)
+* raspberrypi
 * redis.py (with https://github.com/librenms/librenms-agent/pull/327 or https://github.com/tobias-richter/librenms-agent)
 
 Beside the snmp extensions the role is tested with the following checkmk
@@ -94,6 +95,10 @@ This is the complete set of configuration options:
           comment: enable pi hole in librenms
           packages:
             - jq
+        - name: raspberry
+          script: raspberry.sh
+          script_prefix: "/usr/bin/sudo /bin/sh "
+          comment: enable raspberry in librenms
         - name: smart
           script: "smart"
           args: "-c /etc/snmp/snmpd.d/smart.config"

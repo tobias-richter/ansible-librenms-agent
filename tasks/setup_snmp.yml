@@ -87,6 +87,10 @@
   include_tasks: setup_snmp_postfix_queues.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','mailq') | list | count > 0
 
+- name: "snmp : include raspberry setup when raspberry is in the extensions."
+  include_tasks: setup_snmp_raspberry.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','raspberry') | list | count > 0
+
 - name: "snmp : configure snmpd.conf."
   template:
     src: snmpd.conf.j2

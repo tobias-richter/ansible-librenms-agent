@@ -1,0 +1,7 @@
+---
+- name: "snmp : raspberry : give Debian-snmp the appropriate sudo rights."
+  copy:
+    dest: /etc/sudoers.d/Debian-snmp_raspberry
+    content: |
+      Debian-snmp ALL=(ALL) NOPASSWD: /bin/sh /etc/snmp/snmpd.d/raspberry.sh
+    mode: 0600
