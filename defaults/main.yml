@@ -109,7 +109,7 @@ librenms_agent_os_updates_cron_special_time: daily
 librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 
 # The version of smartmontools to install/compile
-librenms_agent_smartmontools_version: 7.1
+librenms_agent_smartmontools_version: 7.2
 
 # Defines the listen address
 # librenms_agent_address: #
