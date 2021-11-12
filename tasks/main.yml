@@ -28,3 +28,24 @@
   include_tasks: setup_check_mk.yml
   tags:
     - librenms-agent-check_mk
+
+
+- name: Deploy systemd service file.
+  template:
+    src: "templates/etc/systemd/system/snmpd.service.j2"
+    dest: "/etc/systemd/system/snmpd.service"
+    mode: 0640
+    owner: "{{ librenms_agent_snmp_owner }}"
+    group: "{{ librenms_agent_snmp_group }}"
+  notify: restart snmpd
+  tags:
+    - librenms-service
+
+- name: Reload snmpd.
+  systemd:
+    name: snmpd
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags:
+    - librenms-service

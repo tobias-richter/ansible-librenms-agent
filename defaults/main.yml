@@ -2,6 +2,9 @@
 # Name of the agent service
 librenms_agent_service_name: snmpd
 
+# systemd after condition
+librenms_agent_service_after: network.target
+
 # The repository to clone the agent extensions from
 librenms_agent_agent_repo: https://github.com/tobias-richter/librenms-agent.git
 # The path to clone the agent extensions to
