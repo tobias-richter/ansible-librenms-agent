@@ -2,7 +2,7 @@
 - name: "snmp : certificate : install required python modules."
   package:
     name:
-      - python-openssl
+      - python3-openssl
 
 - name: "snmp : certificate : deploy certificate."
   template:
