@@ -1,7 +1,7 @@
 name: CI
 
 env:
-  ROLE_NAME: librenms_agent
+  ROLE_NAME: python
 
 on:
   push:
@@ -18,8 +18,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: "${{ env.ROLE_NAME }}"
+
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       
       - name: Cache PIP
         uses: actions/cache@v2
@@ -32,20 +33,19 @@ jobs:
       - name: Install role requirements
         uses: BSFishy/pip-action@v1
         with:
-          requirements: "${{ env.ROLE_NAME }}/requirements.txt"
+          requirements: "requirements.txt"
 
       - name: Create ansible.cfg
-        run: "printf '[defaults]\nroles_path=./tests/requirements/:../' > ${{ env.ROLE_NAME }}/ansible.cfg"
+        run: "printf '[defaults]\nroles_path=./tests/requirements/:../' > ansible.cfg"
 
       - name: ansible-lint
-        # replace "master" with any valid ref
         uses: ansible-community/ansible-lint-action@v6.2.1
 
       - name: ansible-playbook syntax check
         uses: dawidd6/action-ansible-playbook@3c534b3ba0bcbbee2b13fb45226f71acbaca2a76
         with:
           playbook: tests/test.yml
-          directory: "${{ env.ROLE_NAME }}"
+          directory: "."
           requirements: tests/requirements.yml
           options: --syntax-check -i tests/inventory
         
