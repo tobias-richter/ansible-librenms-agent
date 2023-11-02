@@ -1,0 +1,7 @@
+---
+- name: "snmp : wireguard : give Debian-snmp the appropriate sudo rights."
+  copy:
+    dest: /etc/sudoers.d/Debian-snmp_wireguard
+    content: |
+      Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/wg show*
+    mode: 0600
