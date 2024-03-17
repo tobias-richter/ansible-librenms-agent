@@ -114,5 +114,8 @@ librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 # The version of smartmontools to install/compile
 librenms_agent_smartmontools_version: 7.2
 
+# Path to python virtualenv for snmpd
+librenms_agent_python_venv_path: /etc/snmp/.venv
+
 # Defines the listen address
 # librenms_agent_address: #

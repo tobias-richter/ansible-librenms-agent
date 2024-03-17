@@ -8,6 +8,7 @@ Type=simple
 ExecStartPre=/bin/mkdir -p /var/run/agentx
 ExecStart=/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid
 ExecReload=/bin/kill -HUP $MAINPID
+Environment="PATH={{ librenms_agent_python_venv_path }}/bin:{{ ansible_env.PATH }}"
 
 [Install]
 WantedBy=multi-user.target
