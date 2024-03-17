@@ -1,0 +1,6 @@
+---
+
+- name: "snmp : docker : install required python modules."
+  ansible.builtin.pip:
+    name: "{{ librenms_agent_snmp_docker_pip_packages }}"
+    virtualenv: "{{ librenms_agent_python_venv_path }}"

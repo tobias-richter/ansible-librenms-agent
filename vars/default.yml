@@ -6,3 +6,6 @@ librenms_agent_snmp_apache_os_packages:
 librenms_agent_snmp_apache_pip_packages:
   - urlgrabber
   - pycurl
+
+librenms_agent_snmp_docker_pip_packages:
+  - python-dateutil

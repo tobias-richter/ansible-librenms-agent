@@ -95,6 +95,10 @@
   include_tasks: setup_snmp_wireguard.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','wireguard') | list | count > 0
 
+- name: "snmp : include docker setup when docker.py is in the extensions."
+  include_tasks: setup_snmp_docker.yml
+  when: librenms_agent_snmp_extensions | selectattr('name','equalto','docker') | list | count > 0
+
 - name: "snmp : configure snmpd.conf."
   template:
     src: snmpd.conf.j2
