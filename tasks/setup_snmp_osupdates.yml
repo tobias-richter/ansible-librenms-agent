@@ -34,7 +34,7 @@
         path: /etc/logrotate.d/os-updates
         state: absent
 
-- name: "snmp : osupdates : Setup cron for updating apt."
+- name: "snmp : osupdates : manage cron for updating apt."
   cron:
     name: "update apt"
     special_time: "{{ librenms_agent_os_updates_cron_special_time }}"
