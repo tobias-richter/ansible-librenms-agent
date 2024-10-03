@@ -32,7 +32,7 @@
     path: "{{ librenms_agent_snmp_snmpd_extends_dir }}/{{ item }}"
     state: absent
   with_items: "{{ snmpd_contents.files }}"
-  when: librenms_agent_snmp_extensions | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
+  when: librenms_agent_snmp_extensions | selectattr('script', 'defined') | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
 
 - name: "snmp : copy extensions to snmpd.d dir."
   copy:
@@ -76,12 +76,17 @@
 
 - name: "snmp : include os-updates when os-updates is in the extensions."
   include_tasks: setup_snmp_osupdates.yml
-  when: librenms_agent_snmp_extensions | selectattr('name','equalto','osupdate') | list | count > 0
+  when: librenms_agent_snmp_extensions | selectattr('script', 'defined') | selectattr('script','equalto','osupdate') | list | count > 0
   tags:
     - os-updates
     - os-updates-priv
+
+- name: "snmp : include unpriv os-updates when osupdates-unpriv-gather.sh is in the extensions."
+  include_tasks: setup_snmp_unpriv_osupdates.yml
+  when: librenms_agent_snmp_extensions | selectattr('executable', 'defined') | selectattr('executable','equalto','/usr/local/bin/osupdates-unpriv-gather.sh') | list | count > 0
   tags:
     - os-updates
+    - os-updates-unpriv
 
 - name: "snmp : include smart setup when smart is in the extensions."
   include_tasks: setup_snmp_smart.yml
