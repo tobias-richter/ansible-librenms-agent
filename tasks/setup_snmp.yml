@@ -82,7 +82,7 @@
     - os-updates-priv
 
 - name: "snmp : include unpriv os-updates when osupdates-unpriv-gather.sh is in the extensions."
-  include_tasks: setup_snmp_unpriv_osupdates.yml
+  include_tasks: setup_snmp_osupdates_unpriv.yml
   when: librenms_agent_snmp_extensions | selectattr('executable', 'defined') | selectattr('executable','equalto','/usr/local/bin/osupdates-unpriv-gather.sh') | list | count > 0
   tags:
     - os-updates
