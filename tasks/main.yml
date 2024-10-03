@@ -11,6 +11,8 @@
     name:
       - git
       - python3-virtualenv
+  tags:
+    - packages
 
 - name: clone librenms agent setup.
   git:

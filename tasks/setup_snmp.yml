@@ -6,6 +6,7 @@
     name:
       - snmpd
       - moreutils
+  tags: packages
 
 - name: "snmp : create directories."
   file:
@@ -18,6 +19,8 @@
     - "/var/cache/librenms"
     - "{{ librenms_agent_snmp_snmpd_extends_dir }}"
   notify: restart snmpd
+  tags:
+    - setup
 
 - name: "snmp : get files in {{ librenms_agent_snmp_snmpd_extends_dir }}."
   find:
@@ -42,38 +45,55 @@
     group: "{{ librenms_agent_snmp_group }}"
   with_items: "{{ librenms_agent_snmp_extensions }}"
   notify: restart snmpd
+  tags:
+    - snmp-copy
 
 - name: "snmp : Install packages required by snmp scripts."
   package:
     name: "{{ item.packages }}"
   when: item.packages is defined
   with_items: "{{ librenms_agent_snmp_extensions }}"
+  tags:
+    - packages
 
 - name: "snmp : include apache when apache is in the extensions."
   include_tasks: setup_snmp_apache.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','apache') | list | count > 0
+  tags:
+    - apache
 
 - name: "snmp : include apache when apache is in the extensions."
   include_tasks: setup_snmp_certificate.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','certificate') | list | count > 0
+  tags:
+    - certificate
 
 - name: "snmp : include fail2ban when fail2ban is in the extensions."
   include_tasks: setup_snmp_fail2ban.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','fail2ban') | list | count > 0
+  tags:
+    - fail2ban
 
 - name: "snmp : include os-updates when os-updates is in the extensions."
   include_tasks: setup_snmp_osupdates.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','osupdate') | list | count > 0
   tags:
     - os-updates
+    - os-updates-priv
+  tags:
+    - os-updates
 
 - name: "snmp : include smart setup when smart is in the extensions."
   include_tasks: setup_snmp_smart.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','smart') | list | count > 0
+  tags:
+    - smart
 
 - name: "snmp : include mysql setup when mysql is in the extensions."
   include_tasks: setup_snmp_mysql.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','mysql') | list | count > 0
+  tags:
+    - mysql
 
 - name: "snmp : include pihole setup when pihole is in the extensions."
   include_tasks: setup_snmp_pihole.yml
@@ -82,10 +102,14 @@
 - name: "snmp : include postfixdetailed setup when postfixdetailed is in the extensions."
   include_tasks: setup_snmp_postfixdetailed.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','postfixdetailed') | list | count > 0
+  tags:
+    - postfix
 
 - name: "snmp : include mailq/postfix-queues setup when mailq/postfix-queues is in the extensions."
   include_tasks: setup_snmp_postfix_queues.yml
   when: librenms_agent_snmp_extensions | selectattr('name','equalto','mailq') | list | count > 0
+  tags:
+    - postfix
 
 - name: "snmp : include raspberry setup when raspberry is in the extensions."
   include_tasks: setup_snmp_raspberry.yml
