@@ -44,6 +44,7 @@
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   with_items: "{{ librenms_agent_snmp_extensions }}"
+  when: item.script is defined
   notify: restart snmpd
   tags:
     - snmp-copy
