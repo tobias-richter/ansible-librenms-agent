@@ -1,18 +1,18 @@
 ---
-- name: "snmp : postfixdetailed : install required packages."
-  package:
+- name: "SNMP :  postfixdetailed : install required packages."
+  ansible.builtin.package:
     name:
       - pflogsumm
 
-- name: "snmp : postfixdetailed : give Debian-snmp the appropriate sudo rights."
-  copy:
+- name: "SNMP :  postfixdetailed : give Debian-snmp the appropriate sudo rights."
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/Debian-snmp_postfixdetailed
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/env pflogsumm /var/log/mail.log
     mode: 0600
 
-- name: "snmp : postfixdetailed : create initial cache file to avoid strange stats."
-  command: /etc/snmp/snmpd.d/postfixdetailed
+- name: "SNMP :  postfixdetailed : create initial cache file to avoid strange stats."
+  ansible.builtin.command: /etc/snmp/snmpd.d/postfixdetailed
   become_user: "{{ librenms_agent_snmp_owner }}"
   become: yes
   args:

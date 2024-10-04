@@ -1,6 +1,6 @@
 ---
-- name: "snmp : raspberry : give Debian-snmp the appropriate sudo rights."
-  copy:
+- name: "SNMP :  raspberry : give Debian-snmp the appropriate sudo rights."
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/Debian-snmp_raspberry
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /bin/sh /etc/snmp/snmpd.d/raspberry.sh

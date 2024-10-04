@@ -1,6 +1,6 @@
 ---
-- name: "snmp : smart : Create smartmontools directory."
-  file:
+- name: "SNMP :  smart : Create smartmontools directory."
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0755
@@ -8,45 +8,48 @@
     - /opt/smartmontools/
     - /opt/smartmontools/src
 
-- name: "snmp : smart : Install build essential."
-  apt:
+- name: "SNMP :  smart : Install build essential."
+  ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
     name: build-essential
 
-- name: "snmp : smart : Download smartmontools sourcecode." # noqa 204
-  get_url:
-    url: "https://sourceforge.net/projects/smartmontools/files/smartmontools/\
-          {{ librenms_agent_smartmontools_version }}/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz/download"
+- name: "SNMP :  smart : Download smartmontools sourcecode."  # noqa 204
+  ansible.builtin.get_url:
+    url:
+      "https://sourceforge.net/projects/smartmontools/files/smartmontools/\
+      {{ librenms_agent_smartmontools_version }}/\
+      smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz/download"
     dest: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz"
+    mode: 0640
 
-- name: "snmp : smart : Unpack smartmontools sourcecode."
-  unarchive:
+- name: "SNMP :  smart : Unpack smartmontools sourcecode."
+  ansible.builtin.unarchive:
     src: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz"
     dest: /opt/smartmontools/src/
     remote_src: yes
     mode: 0766
 
-- name: "snmp : smart : Build smartmontools."
+- name: "SNMP :  smart : Build smartmontools."
   block:
-    - name: configure
-      command: ./configure
+    - name: "SNMP :  smart : build : configure"
+      ansible.builtin.command: ./configure
       args:
         chdir: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}"
         creates: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}/config.log"
-    - name: make
-      command: make
+    - name: "SNMP :  smart : build : make"
+      ansible.builtin.command: make
       args:
         chdir: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}"
         creates: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}/smartctl.o"
-    - name: make install
-      command: "make DESTDIR=/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin install"
+    - name: "SNMP :  smart : build : make install"
+      ansible.builtin.command: "make DESTDIR=/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin install"
       args:
         chdir: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}"
         creates: "/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin"
 
-- name: "snmp : smart : configure smart.config."
-  template:
+- name: "SNMP :  smart : configure smart.config."
+  ansible.builtin.template:
     src: smart.config.j2
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/smart.config"
     mode: "0640"
@@ -54,16 +57,19 @@
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart snmpd
 
-- name: "snmp : smart : setup cron to read smart values."
-  cron:
+- name: "SNMP :  smart : setup cron to read smart values."
+  ansible.builtin.cron:
     name: "update smart"
     special_time: hourly
     job: "/etc/snmp/snmpd.d/smart -u"
 
-- name: "snmp : smart : setup cron for smart short test."
-  cron:
+- name: "SNMP :  smart : setup cron for smart short test."
+  ansible.builtin.cron:
     name: "run short test {{ item }}"
     special_time: weekly
-    job: "/opt/smartmontools/{{ librenms_agent_smartmontools_version }}/bin/usr/local/sbin/smartctl -t short /dev/{{ item }} 2>&1 | ts >> /var/log/smart.log"
+    job:
+      "/opt/smartmontools/{{ librenms_agent_smartmontools_version }}\
+      /bin/usr/local/sbin/smartctl -t short /dev/{{ item }} \
+      2>&1 | ts >> /var/log/smart.log"
   when: librenms_agent_smart_disks is defined
   with_items: "{{ librenms_agent_smart_disks }}"

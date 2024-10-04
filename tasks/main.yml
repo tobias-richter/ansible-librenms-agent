@@ -1,40 +1,39 @@
 ---
 - name: Include os specific variables.
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
     - "{{ ansible_distribution | lower }}.yml"
     - "default.yml"
 
 - name: Install required packages.
-  package:
+  ansible.builtin.package:
     name:
       - git
       - python3-virtualenv
   tags:
     - packages
 
-- name: clone librenms agent setup.
-  git:
+- name: Clone librenms agent setup.
+  ansible.builtin.git:
     repo: "{{ librenms_agent_agent_repo }}"
     dest: "{{ librenms_agent_agent_dir }}"
     version: "{{ librenms_agent_agent_branch }}"
   tags:
     - librenms-agent-clone
 
-- name: setup snmp.
-  include_tasks: setup_snmp.yml
+- name: Setup snmp.
+  ansible.builtin.include_tasks: setup_snmp.yml
   tags:
     - librenms-agent-snmp
 
-- name: setup check_mk.
-  include_tasks: setup_check_mk.yml
+- name: Setup checkmk.
+  ansible.builtin.include_tasks: setup_check_mk.yml
   tags:
     - librenms-agent-check_mk
 
-
 - name: Deploy systemd service file.
-  template:
+  ansible.builtin.template:
     src: "templates/etc/systemd/system/snmpd.service.j2"
     dest: "/etc/systemd/system/snmpd.service"
     mode: 0640
@@ -45,7 +44,7 @@
     - librenms-service
 
 - name: Reload snmpd.
-  systemd:
+  ansible.builtin.systemd:
     name: snmpd
     state: started
     enabled: yes
@@ -54,30 +53,29 @@
     - librenms-service
 
 # auto add to librenms if configured
-- block:
-
-  - name: Auto add.
-    command: "{{ librenms_agent_auto_add_delegation_lnms_add_command }}"
-    delegate_to: "{{ librenms_agent_auto_add_delegation_host | mandatory }}"
-    become: "{{ librenms_agent_auto_add_delegation_become }}"
-    become_user: "{{ librenms_agent_auto_add_delegation_become_user | mandatory }}"
-    # become_user: "{{ librenms_agent_auto_add_delegation_lnms_path }}"
-    register: auto_add_result
-    failed_when: auto_add_result.rc != 0 and auto_add_result.rc != 3
-    changed_when: auto_add_result.rc == 0
-
-  - name: Output add result
-    debug:
-      var: auto_add_result
-
-  - name: Perform initial poll of system
-    command: "{{ librenms_agent_auto_add_delegation_lnms_poll_command }}"
-    delegate_to: "{{ librenms_agent_auto_add_delegation_host | mandatory }}"
-    become: "{{ librenms_agent_auto_add_delegation_become }}"
-    become_user: "{{ librenms_agent_auto_add_delegation_become_user | mandatory }}"
-    when: auto_add_result.changed
-
+- name: Auto add to librenms
   when: librenms_agent_auto_add_host
   tags:
     - auto-add
+  block:
+    - name: Auto add.
+      ansible.builtin.command: "{{ librenms_agent_auto_add_delegation_lnms_add_command }}"
+      delegate_to: "{{ librenms_agent_auto_add_delegation_host | mandatory }}"
+      become: "{{ librenms_agent_auto_add_delegation_become }}"
+      become_user: "{{ librenms_agent_auto_add_delegation_become_user | mandatory }}"
+      # become_user: "{{ librenms_agent_auto_add_delegation_lnms_path }}"
+      register: auto_add_result
+      failed_when: auto_add_result.rc != 0 and auto_add_result.rc != 3
+      changed_when: auto_add_result.rc == 0
 
+    - name: Output add result
+      ansible.builtin.debug:
+        var: auto_add_result
+
+    - name: Perform initial poll of system
+      ansible.builtin.command: "{{ librenms_agent_auto_add_delegation_lnms_poll_command }}"
+      delegate_to: "{{ librenms_agent_auto_add_delegation_host | mandatory }}"
+      become: "{{ librenms_agent_auto_add_delegation_become }}"
+      become_user: "{{ librenms_agent_auto_add_delegation_become_user | mandatory }}"
+      changed_when: true
+      when: auto_add_result.changed  # noqa: no-handler

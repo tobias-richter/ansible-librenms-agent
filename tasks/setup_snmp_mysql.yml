@@ -1,6 +1,6 @@
 ---
-- name: "snmp : mysql : configure mysql.cnf."
-  template:
+- name: "SNMP :  mysql : configure mysql.cnf."
+  ansible.builtin.template:
     src: mysql.cnf.j2
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}/mysql.cnf"
     mode: "0640"

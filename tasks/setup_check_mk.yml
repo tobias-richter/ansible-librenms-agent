@@ -1,14 +1,14 @@
 ---
-- name: "checkmk : copy check_mk agent bin."
-  copy:
+- name: "Checkmk : copy check_mk agent bin."
+  ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk_agent"
     dest: "/usr/bin/check_mk_agent"
     remote_src: yes
     mode: 0750
   notify: restart check_mk
 
-- name: "checkmk : copy check_mk service file."
-  copy:
+- name: "Checkmk : copy check_mk service file."
+  ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk@.service"
     dest: "/etc/systemd/system"
     remote_src: yes
@@ -17,8 +17,8 @@
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk
 
-- name: "checkmk : deploy check_mk socket file."
-  template:
+- name: "Checkmk : deploy check_mk socket file."
+  ansible.builtin.template:
     src: "templates/etc/systemd/system/check_mk.socket.j2"
     dest: "/etc/systemd/system/check_mk.socket"
     mode: 0640
@@ -26,8 +26,8 @@
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk
 
-- name: "checkmk : create check_mk directories."
-  file:
+- name: "Checkmk : create check_mk directories."
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0750
@@ -39,20 +39,22 @@
     - "/var/cache/librenms"
   notify: restart check_mk
 
-- name: "checkmk : get files in {{ librenms_agent_check_mk_local_dir }}."
-  find:
+- name: "Checkmk : get files in {{ librenms_agent_check_mk_local_dir }}."
+  ansible.builtin.find:
     paths: "{{ librenms_agent_check_mk_local_dir }}"
   register: check_mk_contents
 
-- name: "checkmk : delete not managed files from: {{ librenms_agent_check_mk_local_dir }}."
-  file:
+- name: "Checkmk : delete not managed files from: {{ librenms_agent_check_mk_local_dir }}."
+  ansible.builtin.file:
     path: "{{ librenms_agent_check_mk_local_dir }}/{{ item }}"
     state: absent
   with_items: "{{ check_mk_contents.files }}"
-  when: librenms_agent_check_mk_extensions | selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
+  when: >-
+    librenms_agent_check_mk_extensions |
+    selectattr('script','search', (item.path | basename | splitext)[0] ) | list | count == 0
 
-- name: "checkmk : copy check_mk extensions."
-  copy:
+- name: "Checkmk : copy check_mk extensions."
+  ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/agent-local/{{ item.script }}"
     dest: "{{ librenms_agent_check_mk_local_dir }}"
     mode: 0750
@@ -62,12 +64,12 @@
   with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: restart check_mk
 
-- name: "checkmk : include nginx setup when nginx is in the extensions."
-  include_tasks: setup_check_mk_nginx.yml
+- name: "Checkmk : include nginx setup when nginx is in the extensions."
+  ansible.builtin.include_tasks: setup_check_mk_nginx.yml
   when: librenms_agent_check_mk_extensions | selectattr('script','equalto','nginx') | list | count > 0
 
-- name: "checkmk : enable check_mk service."
-  systemd:
+- name: "Checkmk : enable check_mk service."
+  ansible.builtin.systemd:
     name: check_mk.socket
     enabled: yes
     daemon_reload: yes

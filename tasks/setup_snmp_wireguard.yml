@@ -1,6 +1,6 @@
 ---
-- name: "snmp : wireguard : give Debian-snmp the appropriate sudo rights."
-  copy:
+- name: "SNMP :  wireguard : give Debian-snmp the appropriate sudo rights."
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/Debian-snmp_wireguard
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/wg show*

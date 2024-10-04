@@ -1,6 +1,6 @@
 ---
-- name: "snmp : postfix-queues : give Debian-snmp the appropriate sudo rights."
-  copy:
+- name: "SNMP :  postfix-queues : give Debian-snmp the appropriate sudo rights."
+  ansible.builtin.copy:
     dest: /etc/sudoers.d/Debian-snmp_postfix-queues
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape incoming

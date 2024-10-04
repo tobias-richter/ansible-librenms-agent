@@ -1,22 +1,26 @@
 ---
 
 - name: Set state fact
-  set_fact:
-    osupdates_state: "{{ librenms_agent_snmp_extensions | selectattr('script', 'defined') | selectattr('script','equalto','osupdate') | map(attribute='state') | list | first | default('present')}}"
+  ansible.builtin.set_fact:
+    osupdates_state: >-
+      {{ librenms_agent_snmp_extensions |
+      selectattr('script', 'defined') |
+      selectattr('script', 'equalto', 'osupdate') |
+      map(attribute='state') | list | first | default('present') }}
 
 - name: Add os updates utilities
   when: osupdates_state == 'present'
   block:
-    - name: "snmp : osupdates : Deploy os update script."
-      template:
+    - name: "SNMP :  osupdates : Deploy os update script."
+      ansible.builtin.template:
         src: templates/os-updates.sh.j2
         dest: "/usr/local/bin/os-updates.sh"
         mode: 0750
         owner: "{{ librenms_agent_snmp_owner }}"
         group: "{{ librenms_agent_snmp_group }}"
 
-    - name: "snmp : osupdates : configure logrotate for os-updates log"
-      template:
+    - name: "SNMP :  osupdates : configure logrotate for os-updates log"
+      ansible.builtin.template:
         src: etc/logrotate.d/os-updates.j2
         dest: /etc/logrotate.d/os-updates
         mode: 0644
@@ -24,22 +28,21 @@
 - name: Remove os updates utilities
   when: osupdates_state == 'absent'
   block:
-    - name: "snmp : osupdates : remove os update script."
-      file:
+    - name: "SNMP :  osupdates : remove os update script."
+      ansible.builtin.file:
         path: "/usr/local/bin/os-updates.sh"
         state: absent
 
-    - name: "snmp : osupdates : remove logrotate config"
-      file:
+    - name: "SNMP :  osupdates : remove logrotate config"
+      ansible.builtin.file:
         path: /etc/logrotate.d/os-updates
         state: absent
 
-- name: "snmp : osupdates : manage cron for updating apt."
-  cron:
+- name: "SNMP :  osupdates : manage cron for updating apt."
+  ansible.builtin.cron:
     name: "update apt"
     special_time: "{{ librenms_agent_os_updates_cron_special_time }}"
     job: "/usr/local/bin/os-updates.sh"
     state: "{{ osupdates_state }}"
   notify:
     - restart cron
-

@@ -1,25 +1,25 @@
 ---
 - name: Set state fact
-  set_fact:
-    osupdates_unpriv_state: "{{ librenms_agent_snmp_extensions | selectattr('executable', 'defined') | selectattr('executable','equalto','/usr/local/bin/osupdates-unpriv-gather.sh') | map(attribute='state') | list | first | default('present')}}"
+  ansible.builtin.set_fact:
+    osupdates_unpriv_state: >-
+      {{ librenms_agent_snmp_extensions |
+      selectattr('executable', 'defined') |
+      selectattr('executable', 'equalto', '/usr/local/bin/osupdates-unpriv-gather.sh') |
+      map(attribute='state') | list | first | default('present') }}
 
-- name: debug osupdates_unpriv_state
-  debug:
-    var: osupdates_unpriv_state
-
-- name: Install/Uninstall package dependencies.
+- name: "SNMP :  unpriv osupdates : Install/Uninstall package dependencies."
   ansible.builtin.package:
     name:
       - libsnmp-dev
     state: "{{ osupdates_unpriv_state }}"
- # tags:
- #   - packages
+  tags:
+    - packages
 
 - name: Add unpriv os update utilities
   when: osupdates_unpriv_state == 'present'
   block:
-    - name: "snmp : unpriv osupdates : scripts."
-      copy:
+    - name: "SNMP :  unpriv osupdates : scripts."
+      ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "/usr/local/bin/"
         remote_src: yes
@@ -31,8 +31,8 @@
         - src: "{{ librenms_agent_agent_dir_snmp }}/unpriv/osupdates/osupdates-unpriv-gather.sh"
         - src: "{{ librenms_agent_agent_dir_snmp }}/unpriv/osupdates/osupdates-unpriv-generate.sh"
 
-    - name: "snmp : unpriv osupdates : timer and service."
-      copy:
+    - name: "SNMP :  unpriv osupdates : timer and service."
+      ansible.builtin.copy:
         src: "{{ item.src }}"
         dest: "/etc/systemd/system/"
         remote_src: yes
@@ -44,33 +44,35 @@
         - src: "{{ librenms_agent_agent_dir_snmp }}/unpriv/osupdates/librenms-osupdates-generate.timer"
         - src: "{{ librenms_agent_agent_dir_snmp }}/unpriv/osupdates/librenms-osupdates-generate.service"
 
-    - name: "snmp : unpriv osupdates : enable timer."
+    - name: "SNMP :  unpriv osupdates : enable timer."
       ansible.builtin.systemd_service:
         name: librenms-osupdates-generate.timer
         enabled: true
         state: started
+      register: timer_result
 
-    - name: "snmp : unpriv osupdates : run generate once."
-      command: "/usr/local/bin/osupdates-unpriv-generate.sh"
-      changed_when: false
+    - name: "SNMP :  unpriv osupdates : run generate once."
+      ansible.builtin.command: "/usr/local/bin/osupdates-unpriv-generate.sh"
+      changed_when: true
+      when: timer_result.changed
 
-- name: Remove unpriv os update utilities
+- name: "SNMP :  unpriv osupdates : Remove unpriv os update utilities"
   when: osupdates_unpriv_state == 'absent'
   block:
-    - name: "snmp : unpriv osupdates : check if timer exists."
-      stat:
+    - name: "SNMP :  unpriv osupdates : check if timer exists."
+      ansible.builtin.stat:
         path: /etc/systemd/system/librenms-osupdates-generate.timer
       register: timer_result
 
-    - name: "snmp : unpriv osupdates : disable timer."
+    - name: "SNMP :  unpriv osupdates : disable timer."
       ansible.builtin.systemd_service:
         name: librenms-osupdates-generate.timer
         enabled: false
         state: stopped
       when: timer_result.stat.exists
 
-    - name: "snmp : unpriv osupdates : remove files."
-      file:
+    - name: "SNMP :  unpriv osupdates : remove files."
+      ansible.builtin.file:
         state: absent
         path: "{{ item }}"
       with_items:
