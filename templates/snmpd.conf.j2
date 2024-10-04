@@ -53,8 +53,14 @@ sysName {{ librenms_agent_snmp_sysname | mandatory }}
 # Extensions
 
 {% for extension in librenms_agent_snmp_extensions %}
+{% if extension.state | default('present') == 'present' %}
 #{{ extension.comment | default('') }}
+{% if extension.script is defined  %}
 extend {{ extension.name }} {{ extension.script_prefix | default("") }}{{ librenms_agent_snmp_snmpd_extends_dir }}/{{ extension.script }} {{ extension.args|default('') }}
+{% elif extension.executable is defined %}
+extend {{ extension.name }} {{ extension.executable }} {{ extension.args|default('') }}
+{% endif %}
+{% endif %}
 {% endfor %}
 
 ###############################################################################

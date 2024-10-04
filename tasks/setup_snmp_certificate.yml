@@ -1,13 +1,13 @@
 ---
-- name: "snmp : certificate : install required python modules."
-  package:
+- name: "SNMP :  certificate : install required python modules."
+  ansible.builtin.package:
     name:
       - python3-openssl
 
-- name: "snmp : certificate : deploy certificate."
-  template:
+- name: "SNMP :  certificate : deploy certificate."
+  ansible.builtin.template:
     src: templates/certificate.json.j2
     dest: "/etc/snmp/certificate.json"
-    mode: 0750
+    mode: "0750"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"

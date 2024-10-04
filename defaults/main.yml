@@ -15,7 +15,7 @@ librenms_agent_agent_dir_snmp: "{{ librenms_agent_agent_dir }}/snmp"
 librenms_agent_agent_branch: master
 
 # Enables/Disables the tcp wrapper connect messages in the log
-librenms_agent_dont_log_tcp_wrapper_connects: yes
+librenms_agent_dont_log_tcp_wrapper_connects: true
 
 # Path to the snmp directorues and the config files
 librenms_agent_snmp_dir: /etc/snmp
@@ -120,9 +120,9 @@ librenms_agent_python_venv_path: /etc/snmp/.venv
 # Defines the listen address
 # librenms_agent_address: #
 
-librenms_agent_auto_add_host: no
+librenms_agent_auto_add_host: false
 librenms_agent_auto_add_delegation_host: nms.yourdomain.com
-librenms_agent_auto_add_delegation_become: yes
+librenms_agent_auto_add_delegation_become: true
 librenms_agent_auto_add_delegation_become_user: librenms
 librenms_agent_auto_add_delegation_lnms_add_command: "/opt/librenms/lnms device:add {{ inventory_hostname }}"
 librenms_agent_auto_add_delegation_lnms_poll_command: "/opt/librenms/lnms device:poll {{ inventory_hostname }}"

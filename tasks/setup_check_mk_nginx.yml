@@ -1,10 +1,10 @@
 ---
-- name: "check_mk : nginx : configure nginx status url."
-  replace:
+- name: "Checkmk : nginx : configure nginx status url."
+  ansible.builtin.replace:
     path: "{{ librenms_agent_check_mk_local_dir }}/nginx"
     regexp: "^data = urllib2.urlopen.*"
     replace: "data = urllib2.urlopen('{{ librenms_agent_check_mk_nginx_status_url }}').read()"
-    mode: 0640
+    mode: "0640"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk

@@ -1,11 +1,11 @@
 ---
-- name: "snmp : fail2ban : Install required packages."
-  package:
+- name: "SNMP :  fail2ban : Install required packages."
+  ansible.builtin.package:
     name:
       - libjson-perl
 
-- name: "snmp : fail2ban : setup fail2ban cronjob."
-  cron:
+- name: "SNMP :  fail2ban : setup fail2ban cronjob."
+  ansible.builtin.cron:
     name: "Update snmp extend fail2ban"
     minute: "*/3"
     job: /etc/snmp/snmpd.d/fail2ban -u

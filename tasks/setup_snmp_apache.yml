@@ -1,9 +1,9 @@
 ---
-- name: "snmp : apache : install required os packages."
-  apt:
+- name: "SNMP :  apache : install required os packages."
+  ansible.builtin.apt:
     name: "{{ librenms_agent_snmp_apache_os_packages }}"
 
-- name: "snmp : apache : install required python modules."
+- name: "SNMP :  apache : install required python modules."
   ansible.builtin.pip:
     name: "{{ librenms_agent_snmp_apache_pip_packages }}"
     virtualenv: "{{ librenms_agent_python_venv_path }}"
