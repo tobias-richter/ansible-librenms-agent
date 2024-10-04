@@ -1,15 +1,15 @@
 ---
-- name: Restart snmpd.
+- name: Restart snmpd
   ansible.builtin.service:
     name: "{{ librenms_agent_service_name }}"
     state: restarted
 
-- name: Restart check_mk-
+- name: Restart check_mk
   ansible.builtin.systemd:
     name: check_mk.socket
     state: restarted
 
-- name: Restart cron-
+- name: Restart cron
   ansible.builtin.service:
     name: cron
     state: restarted

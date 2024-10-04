@@ -39,7 +39,7 @@
     mode: 0640
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  notify: restart snmpd
+  notify: Restart snmpd
   tags:
     - librenms-service
 

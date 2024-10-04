@@ -7,7 +7,7 @@
     mode: 0750
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  notify: restart snmpd
+  notify: Restart snmpd
 
 - name: "SNMP :  pihole : configure pihole apiurl."
   ansible.builtin.replace:
@@ -17,4 +17,4 @@
     mode: 0750
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  notify: restart snmpd
+  notify: Restart snmpd
