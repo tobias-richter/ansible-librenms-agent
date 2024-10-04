@@ -1,7 +1,7 @@
 ---
 - name: "SNMP :  Install snmpd and dependencies."
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
     name:
       - snmpd
@@ -12,7 +12,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: "0750"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   with_items:
@@ -41,9 +41,9 @@
   ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir_snmp }}/{{ item.script }}"
     dest: "{{ librenms_agent_snmp_snmpd_extends_dir }}"
-    remote_src: yes
+    remote_src: true
     force: "{{ item.copy_force | default('yes') }}"
-    mode: 0750
+    mode: "0750"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   with_items: "{{ librenms_agent_snmp_extensions }}"
@@ -152,13 +152,13 @@
     name: "{{ librenms_agent_snmp_system_user }}"
     shell: /bin/bash
     groups: sudo
-    append: yes
+    append: true
   notify: Restart snmpd
 
 - name: "SNMP :  assign Debian-snmp to additional groups."
   ansible.builtin.user:
     name: "{{ librenms_agent_snmp_system_user }}"
     groups: "{{ librenms_agent_snmp_system_groups }}"
-    append: yes
+    append: true
   when: librenms_agent_snmp_system_groups | length > 0
   notify: Restart snmpd

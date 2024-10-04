@@ -3,16 +3,16 @@
   ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk_agent"
     dest: "/usr/bin/check_mk_agent"
-    remote_src: yes
-    mode: 0750
+    remote_src: true
+    mode: "0750"
   notify: restart check_mk
 
 - name: "Checkmk : copy check_mk service file."
   ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/check_mk@.service"
     dest: "/etc/systemd/system"
-    remote_src: yes
-    mode: 0644
+    remote_src: true
+    mode: "0644"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk
@@ -21,7 +21,7 @@
   ansible.builtin.template:
     src: "templates/etc/systemd/system/check_mk.socket.j2"
     dest: "/etc/systemd/system/check_mk.socket"
-    mode: 0640
+    mode: "0640"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   notify: restart check_mk
@@ -30,7 +30,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: "0750"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
   with_items:
@@ -57,10 +57,10 @@
   ansible.builtin.copy:
     src: "{{ librenms_agent_agent_dir }}/agent-local/{{ item.script }}"
     dest: "{{ librenms_agent_check_mk_local_dir }}"
-    mode: 0750
+    mode: "0750"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-    remote_src: yes
+    remote_src: true
   with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: restart check_mk
 
@@ -71,6 +71,6 @@
 - name: "Checkmk : enable check_mk service."
   ansible.builtin.systemd:
     name: check_mk.socket
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   notify: restart check_mk

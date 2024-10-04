@@ -15,7 +15,7 @@
       ansible.builtin.template:
         src: templates/os-updates.sh.j2
         dest: "/usr/local/bin/os-updates.sh"
-        mode: 0750
+        mode: "0750"
         owner: "{{ librenms_agent_snmp_owner }}"
         group: "{{ librenms_agent_snmp_group }}"
 
@@ -23,7 +23,7 @@
       ansible.builtin.template:
         src: etc/logrotate.d/os-updates.j2
         dest: /etc/logrotate.d/os-updates
-        mode: 0644
+        mode: "0644"
 
 - name: Remove os updates utilities
   when: osupdates_state == 'absent'

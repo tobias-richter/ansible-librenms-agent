@@ -9,11 +9,11 @@
     dest: /etc/sudoers.d/Debian-snmp_postfixdetailed
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/env pflogsumm /var/log/mail.log
-    mode: 0600
+    mode: "0600"
 
 - name: "SNMP :  postfixdetailed : create initial cache file to avoid strange stats."
   ansible.builtin.command: /etc/snmp/snmpd.d/postfixdetailed
   become_user: "{{ librenms_agent_snmp_owner }}"
-  become: yes
+  become: true
   args:
     creates: /var/cache/librenms/postfixdetailed

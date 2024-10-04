@@ -4,4 +4,4 @@
     dest: /etc/sudoers.d/Debian-snmp_raspberry
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /bin/sh /etc/snmp/snmpd.d/raspberry.sh
-    mode: 0600
+    mode: "0600"

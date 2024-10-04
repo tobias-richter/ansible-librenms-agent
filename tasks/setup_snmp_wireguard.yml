@@ -4,4 +4,4 @@
     dest: /etc/sudoers.d/Debian-snmp_wireguard
     content: |
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/bin/wg show*
-    mode: 0600
+    mode: "0600"

@@ -3,14 +3,14 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0755
+    mode: "0755"
   with_items:
     - /opt/smartmontools/
     - /opt/smartmontools/src
 
 - name: "SNMP :  smart : Install build essential."
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
     name: build-essential
 
@@ -21,14 +21,14 @@
       {{ librenms_agent_smartmontools_version }}/\
       smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz/download"
     dest: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz"
-    mode: 0640
+    mode: "0640"
 
 - name: "SNMP :  smart : Unpack smartmontools sourcecode."
   ansible.builtin.unarchive:
     src: "/opt/smartmontools/src/smartmontools-{{ librenms_agent_smartmontools_version }}.tar.gz"
     dest: /opt/smartmontools/src/
-    remote_src: yes
-    mode: 0766
+    remote_src: true
+    mode: "0766"
 
 - name: "SNMP :  smart : Build smartmontools."
   block:
