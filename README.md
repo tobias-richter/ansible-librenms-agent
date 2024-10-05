@@ -10,6 +10,7 @@ for setting up librenms.
 This role is tested with the following snmp extensions (and may work
 with more):
 * osupdate
+* osupdate unpriviledged
 * distro
 * entropy
 * apache-stats.py
@@ -70,6 +71,11 @@ This is the complete set of configuration options:
         - name: osupdate
           script: osupdate
           comment: enable os updates in librenms
+          state: absent
+        - name: osupdate
+          executable: /usr/local/bin/osupdates-unpriv-gather.sh
+          comment: enable unpriv os updates in librenms
+          state: present
         - name: ".1.3.6.1.4.1.2021.7890.1 distro"
           script: distro
           comment: enable distribution
@@ -129,8 +135,8 @@ This playbook setups a snmpd agent for librenms with osupdate, distro and dpkg e
 	    - role: tobias_richter.librenms_agent
           librenms_agent_snmp_extensions:
             - name: osupdate
-              script: osupdate
-              comment: enable os updates in librenms
+              executable: /usr/local/bin/osupdates-unpriv-gather.sh
+              comment: enable unpriv os updates in librenms
             - name: ".1.3.6.1.4.1.2021.7890.1 distro"
               script: distro
               comment: enable distribution
