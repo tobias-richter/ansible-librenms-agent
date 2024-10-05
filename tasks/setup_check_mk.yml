@@ -5,7 +5,7 @@
     dest: "/usr/bin/check_mk_agent"
     remote_src: true
     mode: "0750"
-  notify: restart check_mk
+  notify: Restart check_mk
 
 - name: "Checkmk : copy check_mk service file."
   ansible.builtin.copy:
@@ -15,7 +15,7 @@
     mode: "0644"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  notify: restart check_mk
+  notify: Restart check_mk
 
 - name: "Checkmk : deploy check_mk socket file."
   ansible.builtin.template:
@@ -24,7 +24,7 @@
     mode: "0640"
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
-  notify: restart check_mk
+  notify: Restart check_mk
 
 - name: "Checkmk : create check_mk directories."
   ansible.builtin.file:
@@ -37,7 +37,7 @@
     - "{{ librenms_agent_check_mk_local_dir }}"
     - "{{ librenms_agent_check_mk_plugins_dir }}"
     - "/var/cache/librenms"
-  notify: restart check_mk
+  notify: Restart check_mk
 
 - name: "Checkmk : get files in {{ librenms_agent_check_mk_local_dir }}."
   ansible.builtin.find:
@@ -63,6 +63,7 @@
     remote_src: true
   with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: restart check_mk
+  notify: Restart check_mk
 
 - name: "Checkmk : include nginx setup when nginx is in the extensions."
   ansible.builtin.include_tasks: setup_check_mk_nginx.yml
@@ -73,4 +74,4 @@
     name: check_mk.socket
     enabled: true
     daemon_reload: true
-  notify: restart check_mk
+  notify: Restart check_mk
