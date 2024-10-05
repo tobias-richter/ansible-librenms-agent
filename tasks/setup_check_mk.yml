@@ -61,8 +61,16 @@
     owner: "{{ librenms_agent_snmp_owner }}"
     group: "{{ librenms_agent_snmp_group }}"
     remote_src: true
+  when: item.state | default('present') == 'present'
   with_items: "{{ librenms_agent_check_mk_extensions }}"
-  notify: restart check_mk
+  notify: Restart check_mk
+
+- name: "Checkmk : delete ."
+  ansible.builtin.file:
+    state: absent
+    path: "{{ librenms_agent_check_mk_local_dir }}/{{ item.script }}"
+  when: item.state | default('present') == 'absent'
+  with_items: "{{ librenms_agent_check_mk_extensions }}"
   notify: Restart check_mk
 
 - name: "Checkmk : include nginx setup when nginx is in the extensions."
