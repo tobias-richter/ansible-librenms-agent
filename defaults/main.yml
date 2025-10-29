@@ -117,6 +117,9 @@ librenms_agent_smartmontools_version: 7.2
 # Path to python virtualenv for snmpd
 librenms_agent_python_venv_path: /etc/snmp/.venv
 
+# Set this to true in order to recreate the virtualenv
+librenms_agent_python_venv_recreate: false
+
 # Defines the listen address
 # librenms_agent_address: #
 
