@@ -155,6 +155,23 @@
     append: true
   notify: Restart snmpd
 
+- name: "SNMP :  keep the sudo calls of the snmp extends out of the journal."
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ librenms_agent_snmp_system_user }}_quiet"
+    content: |
+      Defaults:{{ librenms_agent_snmp_system_user }} !log_allowed, !pam_session
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "/usr/sbin/visudo -cf %s"
+  when: librenms_agent_snmp_sudo_quiet | bool
+
+- name: "SNMP :  remove the sudo quiet drop-in when disabled."
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/{{ librenms_agent_snmp_system_user }}_quiet"
+    state: absent
+  when: not (librenms_agent_snmp_sudo_quiet | bool)
+
 - name: "SNMP :  assign Debian-snmp to additional groups."
   ansible.builtin.user:
     name: "{{ librenms_agent_snmp_system_user }}"
