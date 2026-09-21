@@ -48,6 +48,22 @@ Mandantory variables are:
 * `librenms_agent_snmp_password`
 * `librenms_agent_snmp_encryption`
 
+### Quiet sudo logging
+
+The SNMP extends that need root (postfix, wireguard, raspberry, ...) run through `sudo`, which writes
+the command and a PAM session open/close line to the journal on every poll. With
+`librenms_agent_snmp_sudo_quiet: true` (default) the role installs
+`/etc/sudoers.d/<snmp user>_quiet` with `Defaults:<snmp user> !log_allowed, !pam_session`.
+Denied calls are still logged.
+
+* Requires sudo >= 1.8.29. The role reads `sudo -V` and skips the file (and removes an existing one)
+  on older versions.
+* `sudo-rs` (default `sudo` on Ubuntu 26.04) does not know `log_allowed`, so the file is skipped there
+  too and the allowed calls are still logged.
+* Set `librenms_agent_snmp_sudo_quiet: false` to always remove the file.
+
+The sudoers files for the extends are written with mode `0440` and checked with `visudo -cf`.
+
 ## Configure SNMP Extensions
 
 This is the complete set of configuration options:

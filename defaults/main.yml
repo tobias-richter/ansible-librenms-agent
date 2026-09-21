@@ -34,6 +34,8 @@ librenms_agent_snmp_group: "root"
 # Every snmpd poll otherwise writes the command plus a PAM session open/close line per extend.
 # Denied sudo calls are still logged. Needs sudo >= 1.8.29 (log_allowed); the drop-in is
 # skipped (and removed) automatically on older systems such as Debian 10 and Ubuntu 18.04.
+# It is skipped as well when `sudo` is sudo-rs (default on Ubuntu 26.04, version 0.2.x): sudo-rs
+# has no log_allowed and would reject the file. The allowed calls of the extends stay in the journal there.
 librenms_agent_snmp_sudo_quiet: true
 
 # The read only community name
