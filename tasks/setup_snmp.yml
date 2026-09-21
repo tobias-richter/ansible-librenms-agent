@@ -155,6 +155,38 @@
     append: true
   notify: Restart snmpd
 
+- name: "SNMP :  detect the sudo version."
+  ansible.builtin.command: sudo -V
+  register: librenms_agent_sudo_version_output
+  changed_when: false
+  check_mode: false
+  failed_when: false
+
+- name: "SNMP :  parse the sudo version."
+  ansible.builtin.set_fact:
+    librenms_agent_sudo_version: >-
+      {{ librenms_agent_sudo_version_output.stdout | default('')
+      | regex_search('[0-9]+[.][0-9]+[.][0-9]+') | default('0.0.0', true) }}
+
+- name: "SNMP :  keep the sudo calls of the snmp extends out of the journal."
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ librenms_agent_snmp_system_user }}_quiet"
+    content: |
+      Defaults:{{ librenms_agent_snmp_system_user }} !log_allowed, !pam_session
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "/usr/sbin/visudo -cf %s"
+  when:
+    - librenms_agent_snmp_sudo_quiet | bool
+    - librenms_agent_sudo_version is version('1.8.29', '>=')
+
+- name: "SNMP :  remove the sudo quiet drop-in when disabled or unsupported."
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/{{ librenms_agent_snmp_system_user }}_quiet"
+    state: absent
+  when: not (librenms_agent_snmp_sudo_quiet | bool) or librenms_agent_sudo_version is version('1.8.29', '<')
+
 - name: "SNMP :  assign Debian-snmp to additional groups."
   ansible.builtin.user:
     name: "{{ librenms_agent_snmp_system_user }}"

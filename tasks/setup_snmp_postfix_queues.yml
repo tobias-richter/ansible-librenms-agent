@@ -7,4 +7,5 @@
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape active
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape deferred
       Debian-snmp ALL=(ALL) NOPASSWD: /usr/sbin/qshape hold
-    mode: "0600"
+    mode: "0440"
+    validate: "/usr/sbin/visudo -cf %s"

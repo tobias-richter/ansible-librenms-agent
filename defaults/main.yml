@@ -30,6 +30,12 @@ librenms_agent_snmp_system_groups: []
 librenms_agent_snmp_owner: "{{ librenms_agent_snmp_system_user }}"
 librenms_agent_snmp_group: "root"
 
+# Do not log the sudo calls of the snmp extends (postfix, wireguard, ...) to the journal.
+# Every snmpd poll otherwise writes the command plus a PAM session open/close line per extend.
+# Denied sudo calls are still logged. Needs sudo >= 1.8.29 (log_allowed); the drop-in is
+# skipped (and removed) automatically on older systems such as Debian 10 and Ubuntu 18.04.
+librenms_agent_snmp_sudo_quiet: true
+
 # The read only community name
 librenms_agent_snmp_rocommunities: []
 # example:
