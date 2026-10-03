@@ -1,10 +1,11 @@
+---
 name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 permissions:
   contents: read
@@ -37,7 +38,7 @@ jobs:
         run: ansible-playbook --syntax-check -i tests/inventory tests/test.yml
 
       - name: ansible-lint
-        uses: ansible/ansible-lint@v26.8.0
+        uses: ansible/ansible-lint@v26.9.0
 
   import:
     name: import
