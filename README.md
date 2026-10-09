@@ -64,6 +64,13 @@ Denied calls are still logged.
 
 The sudoers files for the extends are written with mode `0440` and checked with `visudo -cf`.
 
+### Checkmk socket on an address that appears late
+
+If `librenms_agent_check_mk_listenstream` is an address that is added after `sockets.target` (e.g. a
+WireGuard address from `wg-quick`), systemd fails to bind it at boot with `Cannot assign requested
+address` and `check_mk.socket` stays failed. Set `librenms_agent_check_mk_freebind: true` (default
+`false`) to add `FreeBind=yes` to the socket, so it binds before the address exists.
+
 ## Configure SNMP Extensions
 
 This is the complete set of configuration options:
