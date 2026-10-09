@@ -89,6 +89,10 @@ librenms_agent_snmp_ignoredisk: []
 # Checkmk socket ListenStream configuration, e.g. 127.0.0.1:6556 for localhost only
 librenms_agent_check_mk_listenstream: 6556
 
+# Set FreeBind=yes on the Checkmk socket so it can bind an address that does not exist yet at boot,
+# e.g. a WireGuard address that wg-quick adds after sockets.target
+librenms_agent_check_mk_freebind: false
+
 # Configuration for check mk addons
 librenms_agent_check_mk_extensions: []
 # e.g. - script: dpkg

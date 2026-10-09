@@ -3,6 +3,9 @@ Description=Check_MK LibreNMS Agent Socket
 
 [Socket]
 ListenStream={{ librenms_agent_check_mk_listenstream }}
+{% if librenms_agent_check_mk_freebind | bool %}
+FreeBind=yes
+{% endif %}
 Accept=yes
 
 [Install]
