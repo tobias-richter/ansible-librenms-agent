@@ -8,6 +8,7 @@
   ansible.builtin.systemd:
     name: check_mk.socket
     state: restarted
+    daemon_reload: true
 
 - name: Restart cron
   ansible.builtin.service:

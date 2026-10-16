@@ -7,6 +7,12 @@ ListenStream={{ librenms_agent_check_mk_listenstream }}
 FreeBind=yes
 {% endif %}
 Accept=yes
+{% if librenms_agent_check_mk_max_connections | string | length %}
+MaxConnections={{ librenms_agent_check_mk_max_connections }}
+{% endif %}
+{% if librenms_agent_check_mk_max_connections_per_source | string | length %}
+MaxConnectionsPerSource={{ librenms_agent_check_mk_max_connections_per_source }}
+{% endif %}
 
 [Install]
 WantedBy=sockets.target

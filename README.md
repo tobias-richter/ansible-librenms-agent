@@ -71,6 +71,28 @@ WireGuard address from `wg-quick`), systemd fails to bind it at boot with `Canno
 address` and `check_mk.socket` stays failed. Set `librenms_agent_check_mk_freebind: true` (default
 `false`) to add `FreeBind=yes` to the socket, so it binds before the address exists.
 
+### Checkmk resource limits
+
+By default the Checkmk socket (`Accept=yes`) accepts up to 64 simultaneous `check_mk@` instances (systemd
+default) and an instance has no runtime or memory limit. On small hosts a few piled-up instances can
+exhaust memory. All of the following variables are unset by default (upstream behaviour); set a value to
+enable it:
+
+| Variable | Applied to | systemd option | Example |
+| --- | --- | --- | --- |
+| `librenms_agent_check_mk_max_connections` | `check_mk.socket` | `MaxConnections=` | `8` |
+| `librenms_agent_check_mk_max_connections_per_source` | `check_mk.socket` | `MaxConnectionsPerSource=` | `3` |
+| `librenms_agent_check_mk_runtime_max_sec` | `check_mk@.service` drop-in | `RuntimeMaxSec=` | `120` |
+| `librenms_agent_check_mk_memory_max` | `check_mk@.service` drop-in | `MemoryMax=` | `256M` |
+| `librenms_agent_check_mk_nice` | `check_mk@.service` drop-in | `Nice=` | `10` |
+| `librenms_agent_check_mk_timeout_stop_sec` | `check_mk@.service` drop-in | `TimeoutStopSec=` | `10` |
+
+The service options are written to `/etc/systemd/system/check_mk@.service.d/50-limits.conf`; the file is
+removed again when none of them is set. Connections above `MaxConnections` are refused, not queued, so
+keep `librenms_agent_check_mk_max_connections_per_source` at least as high as the number of parallel
+polls from one LibreNMS address. `MemoryMax=` needs the memory controller (not delegated in some
+unprivileged containers, where it is ignored).
+
 ## Configure SNMP Extensions
 
 This is the complete set of configuration options:

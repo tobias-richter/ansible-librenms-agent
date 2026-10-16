@@ -1,0 +1,14 @@
+# Ansible managed (ansible-librenms-agent)
+[Service]
+{% if librenms_agent_check_mk_runtime_max_sec | string | length %}
+RuntimeMaxSec={{ librenms_agent_check_mk_runtime_max_sec }}
+{% endif %}
+{% if librenms_agent_check_mk_memory_max | string | length %}
+MemoryMax={{ librenms_agent_check_mk_memory_max }}
+{% endif %}
+{% if librenms_agent_check_mk_nice | string | length %}
+Nice={{ librenms_agent_check_mk_nice }}
+{% endif %}
+{% if librenms_agent_check_mk_timeout_stop_sec | string | length %}
+TimeoutStopSec={{ librenms_agent_check_mk_timeout_stop_sec }}
+{% endif %}
