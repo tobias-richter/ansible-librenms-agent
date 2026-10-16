@@ -93,6 +93,24 @@ librenms_agent_check_mk_listenstream: 6556
 # e.g. a WireGuard address that wg-quick adds after sockets.target
 librenms_agent_check_mk_freebind: false
 
+# Optional resource limits for the Checkmk agent. All are unset (empty) by default, which keeps the
+# upstream behaviour (systemd default: up to 64 simultaneous check_mk@ instances, no runtime or
+# memory limit). Set a value to enable it.
+#
+# Socket (applied to check_mk.socket, which uses Accept=yes):
+#   total simultaneous connections, and per source address
+librenms_agent_check_mk_max_connections: ""
+librenms_agent_check_mk_max_connections_per_source: ""
+# Per connection service (drop-in for check_mk@.service):
+#   kill an instance that runs longer than this many seconds, e.g. 120
+librenms_agent_check_mk_runtime_max_sec: ""
+#   cgroup memory cap for one instance, e.g. 256M
+librenms_agent_check_mk_memory_max: ""
+#   CPU niceness, e.g. 10
+librenms_agent_check_mk_nice: ""
+#   seconds to wait on stop before SIGKILL, e.g. 10
+librenms_agent_check_mk_timeout_stop_sec: ""
+
 # Configuration for check mk addons
 librenms_agent_check_mk_extensions: []
 # e.g. - script: dpkg

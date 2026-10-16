@@ -26,6 +26,39 @@
     group: "{{ librenms_agent_snmp_group }}"
   notify: Restart check_mk
 
+- name: "Checkmk : deploy check_mk service resource limits drop-in."
+  when: >-
+    [librenms_agent_check_mk_runtime_max_sec, librenms_agent_check_mk_memory_max,
+    librenms_agent_check_mk_nice, librenms_agent_check_mk_timeout_stop_sec]
+    | map('string') | select | list | length > 0
+  block:
+    - name: "Checkmk : create check_mk@.service drop-in directory."
+      ansible.builtin.file:
+        path: /etc/systemd/system/check_mk@.service.d
+        state: directory
+        mode: "0755"
+        owner: root
+        group: root
+
+    - name: "Checkmk : deploy check_mk@.service limits drop-in."
+      ansible.builtin.template:
+        src: "templates/etc/systemd/system/check_mk@.service.d/50-limits.conf.j2"
+        dest: /etc/systemd/system/check_mk@.service.d/50-limits.conf
+        mode: "0644"
+        owner: root
+        group: root
+      notify: Restart check_mk
+
+- name: "Checkmk : remove check_mk@.service limits drop-in when no limit is set."
+  ansible.builtin.file:
+    path: /etc/systemd/system/check_mk@.service.d/50-limits.conf
+    state: absent
+  when: >-
+    [librenms_agent_check_mk_runtime_max_sec, librenms_agent_check_mk_memory_max,
+    librenms_agent_check_mk_nice, librenms_agent_check_mk_timeout_stop_sec]
+    | map('string') | select | list | length == 0
+  notify: Restart check_mk
+
 - name: "Checkmk : create check_mk directories."
   ansible.builtin.file:
     path: "{{ item }}"
