@@ -40,7 +40,11 @@
     - librenms-agent-check_mk
 
 - name: Manage the smartd service.
-  ansible.builtin.include_tasks: setup_smartd.yml
+  ansible.builtin.include_tasks:
+    file: setup_smartd.yml
+    apply:
+      tags:
+        - librenms-agent-smartd
   when: librenms_agent_smartd_service_enabled | string | length > 0
   tags:
     - librenms-agent-smartd

@@ -13,5 +13,7 @@
 - name: "Smartd : clear the failed state of a disabled smartd service."
   ansible.builtin.command: "systemctl reset-failed {{ librenms_agent_smartd_service_name }}"  # noqa: command-instead-of-module
   changed_when: false
-  failed_when: false
-  when: not (librenms_agent_smartd_service_enabled | bool)
+  # Only when the unit exists; a real reset-failed error is not hidden.
+  when:
+    - not (librenms_agent_smartd_service_enabled | bool)
+    - "'Could not find' not in (librenms_agent_smartd_result.msg | default(''))"
