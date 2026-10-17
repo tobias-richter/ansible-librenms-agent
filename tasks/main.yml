@@ -39,6 +39,16 @@
   tags:
     - librenms-agent-check_mk
 
+- name: Manage the smartd service.
+  ansible.builtin.include_tasks:
+    file: setup_smartd.yml
+    apply:
+      tags:
+        - librenms-agent-smartd
+  when: librenms_agent_smartd_service_enabled | string | length > 0
+  tags:
+    - librenms-agent-smartd
+
 - name: Deploy systemd service file.
   ansible.builtin.template:
     src: "templates/etc/systemd/system/snmpd.service.j2"

@@ -141,6 +141,13 @@ librenms_agent_os_updates_cron_special_time: daily
 # Basic configuration of the certificate extension
 librenms_agent_certificate_hostname: "{{ inventory_hostname }}"
 
+# Optionally manage the distribution's smartd service (smartmontools.service). Unset (empty) by
+# default: the service is left alone. true enables and starts it, false disables and stops it, e.g. on a
+# host whose only disk (USB stick, virtual disk) has no SMART support, where smartd would exit with
+# "No devices to monitor" and stay failed.
+librenms_agent_smartd_service_enabled: ""
+librenms_agent_smartd_service_name: smartmontools.service
+
 # The version of smartmontools to install/compile
 librenms_agent_smartmontools_version: 7.2
 
