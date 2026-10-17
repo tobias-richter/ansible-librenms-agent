@@ -37,7 +37,7 @@
         dest: "/etc/systemd/system/"
         remote_src: true
         force: "{{ item.copy_force | default('yes') }}"
-        mode: "0640"
+        mode: "0644"
         owner: "root"
         group: "root"
       with_items:
