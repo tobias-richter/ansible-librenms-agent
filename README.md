@@ -93,6 +93,16 @@ keep `librenms_agent_check_mk_max_connections_per_source` at least as high as th
 polls from one LibreNMS address. `MemoryMax=` needs the memory controller (not delegated in some
 unprivileged containers, where it is ignored).
 
+### Managing the distribution's smartd service
+
+The role does not touch `smartmontools.service` by default. Set `librenms_agent_smartd_service_enabled`
+(default empty) to `true` to enable and start it, or to `false` to stop and disable it and clear its
+failed state. This is meant for hosts whose only disk has no SMART support (a USB boot stick, a virtual
+disk), where `smartd` exits with `No devices to monitor` and shows up as a failed unit, and which may
+get a real disk later. `librenms_agent_smartd_service_name` (default `smartmontools.service`) names the
+unit. A host without the package is not an error. This is independent of the SMART SNMP extension, which
+builds its own `smartctl` under `/opt/smartmontools`.
+
 ## Configure SNMP Extensions
 
 This is the complete set of configuration options:

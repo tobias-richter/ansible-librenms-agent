@@ -1,0 +1,17 @@
+---
+- name: "Smartd : enable or disable the smartd service."
+  ansible.builtin.systemd_service:
+    name: "{{ librenms_agent_smartd_service_name }}"
+    enabled: "{{ librenms_agent_smartd_service_enabled | bool }}"
+    state: "{{ 'started' if (librenms_agent_smartd_service_enabled | bool) else 'stopped' }}"
+  register: librenms_agent_smartd_result
+  # A host without the smartmontools package is fine.
+  failed_when:
+    - librenms_agent_smartd_result.failed | default(false)
+    - "'Could not find' not in (librenms_agent_smartd_result.msg | default(''))"
+
+- name: "Smartd : clear the failed state of a disabled smartd service."
+  ansible.builtin.command: "systemctl reset-failed {{ librenms_agent_smartd_service_name }}"  # noqa: command-instead-of-module
+  changed_when: false
+  failed_when: false
+  when: not (librenms_agent_smartd_service_enabled | bool)
